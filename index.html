@@ -27,7 +27,9 @@
       --btn-blue-hover: #2b6cb0;
       --btn-green: #48bb78;
       --btn-green-hover: #38a169;
+      --btn-red: #e53e3e;
       --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --history-bg: #f7fafc;
     }
 
     body.dark-mode {
@@ -48,6 +50,7 @@
       --ad-bg: #4a5568;
       --ad-text: #cbd5e0;
       --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --history-bg: #2d3748;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; }
@@ -56,9 +59,8 @@
     .top-controls { display: flex; justify-content: space-between; align-items: center; max-width: 560px; margin: 0 auto 15px auto; }
     .lang-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-color); font-weight: 600; cursor: pointer; outline: none; }
     .btn-icon { background: var(--container-bg); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1.2rem; color: var(--text-color); display: flex; align-items: center; justify-content: center;}
-    .btn-icon:hover { opacity: 0.8; }
-
-    .container { max-width: 560px; margin: 0 auto; background: var(--container-bg); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); }
+    
+    .container { max-width: 560px; margin: 0 auto; background: var(--container-bg); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 20px;}
     h1 { font-size: 1.6rem; margin-bottom: 4px; color: var(--text-color); text-align: center; }
     .subtitle { color: var(--subtitle-color); font-size: 0.9rem; margin-bottom: 24px; text-align: center; }
     
@@ -72,10 +74,8 @@
     label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--subtitle-color); margin-bottom: 6px; }
     .input-row { display: flex; gap: 10px; margin-bottom: 16px; }
     input[type="number"] { flex: 1; padding: 14px; border: 1.5px solid var(--input-border); border-radius: 8px; font-size: 1.1rem; font-weight: 600; outline: none; width: 100%; background: var(--input-bg); color: var(--text-color); }
-    input[type="number"]:focus { border-color: var(--btn-blue); }
     
     .btn-calc { width: 100%; padding: 14px; background: var(--btn-blue); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 10px;}
-    .btn-calc:hover { background: var(--btn-blue-hover); }
     
     .result { margin-top: 20px; padding: 20px; background: var(--result-bg); border: 1.5px solid var(--result-border); border-radius: 12px; display: none; }
     .result.show { display: block; }
@@ -84,15 +84,26 @@
     .result-row:last-child { border-bottom: none; }
     .result-row span:last-child { font-weight: 700; }
     
+    /* HISTORY STYLES */
+    .history-box { margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 15px; display: none; }
+    .history-box.show { display: block; }
+    .history-item { background: var(--history-bg); padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; border: 1px solid var(--border-color); }
+    .btn-save { background: var(--btn-green); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold;}
+    .btn-clear { background: transparent; color: var(--btn-red); border: 1px solid var(--btn-red); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; margin-top: 10px; width: 100%;}
+
+    /* FAQ STYLES */
+    .faq-section { margin-top: 30px; }
+    .faq-section h2 { font-size: 1.2rem; margin-bottom: 15px; text-align: center;}
+    details { background: var(--history-bg); padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); cursor: pointer; }
+    summary { font-weight: 600; font-size: 0.95rem; outline: none; }
+    details p { margin-top: 10px; font-size: 0.9rem; color: var(--subtitle-color); }
+
     .note { font-size: 0.8rem; color: var(--subtitle-color); margin-top: 16px; text-align: center;}
     .ad-slot { margin-top: 24px; min-height: 100px; background: var(--ad-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--ad-text); font-size: 0.8rem; border: 1px dashed var(--border-color);}
-    
     .seo-content { margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 20px; }
     .seo-content h2 { font-size: 1.2rem; margin-bottom: 10px; color: var(--text-color); }
     .seo-content p { font-size: 0.9rem; color: var(--subtitle-color); margin-bottom: 12px; }
-    
     .btn-share { display: block; width: 100%; padding: 12px; background: var(--btn-green); color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 15px; font-size: 0.95rem; border: none; cursor: pointer;}
-    .btn-share:hover { background: var(--btn-green-hover); }
   </style>
 </head>
 <body>
@@ -102,7 +113,7 @@
       <option value="en">🇬🇧 English</option>
       <option value="ru">🇷🇺 Русский</option>
     </select>
-    <button class="btn-icon" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
+    <button class="btn-icon" id="themeToggle" onclick="toggleTheme()">🌙</button>
   </div>
 
   <div class="container">
@@ -128,6 +139,13 @@
     <div class="result" id="result">
       <div class="result-total" id="resultTotal"></div>
       <div id="resultDetails"></div>
+      <button class="btn-save" id="t-save-btn" onclick="saveToHistory()">💾 შენახვა</button>
+    </div>
+
+    <div class="history-box" id="historyBox">
+      <h3 style="font-size: 1rem; margin-bottom: 10px;" id="t-history-title">ისტორია</h3>
+      <div id="historyList"></div>
+      <button class="btn-clear" id="t-clear-btn" onclick="clearHistory()">🗑️ ისტორიის გასუფთავება</button>
     </div>
 
     <div class="ad-slot" id="t-ad">📢 რეკლამის ადგილი (AdSense)</div>
@@ -136,13 +154,16 @@
     
     <p class="note" id="noteText"></p>
 
+    <div class="faq-section" id="t-faq-section">
+      <!-- FAQ will be injected here -->
+    </div>
+
     <div class="seo-content" id="t-seo-content">
       <!-- SEO Content goes here -->
     </div>
   </div>
 
   <script>
-    // --- TRANSLATIONS DICTIONARY ---
     const translations = {
       ka: {
         title: "ხელფასის კალკულატორი",
@@ -158,6 +179,11 @@
         ad: "📢 რეკლამის ადგილი (AdSense)",
         share: "🔗 გაუზიარე მეგობრებს",
         shareAlert: "ლინკი დაკოპირებულია!",
+        saveBtn: "💾 გამოთვლის შენახვა",
+        savedAlert: "შენახულია ისტორიაში!",
+        historyTitle: "შენახული გამოთვლები",
+        clearBtn: "🗑️ ისტორიის გასუფთავება",
+        noHistory: "ისტორია ცარიელია.",
         noteEmp: "გაანგარიშება: საშემოსავლო 20% + საპენსიო 2%. სულ ხელზე = გროსი × 0.78.",
         noteSb: "მცირე ბიზნესის სტატუსი: 1% ბრუნვაზე. წლიური ლიმიტი 500,000 ₾.",
         noteEmpr: "დამსაქმებლის ხარჯი = გროსი + 2% საპენსიო (დამსაქმებლის წილი).",
@@ -172,13 +198,15 @@
         remaining: "დარჩენილი (ნეტო)",
         totalCost: "სულ ხარჯი",
         empNet: "თანამშრომლის ნეტო",
+        faqTitle: "ხშირად დასმული კითხვები (FAQ)",
+        faq: `
+          <details><summary>რა განსხვავებაა გროსსა და ნეტოს შორის?</summary><p>გროსი არის ხელფასი გადასახადებამდე, ნეტო კი — თანხა, რომელსაც თანამშრომელი ხელზე იღებს.</p></details>
+          <details><summary>რამდენია საშემოსავლო გადასახადი 2026 წელს?</summary><p>საქართველოში საშემოსავლო გადასახადი ბრტყელია და შეადგენს 20%-ს.</p></details>
+          <details><summary>რა არის მცირე ბიზნესის სტატუსი?</summary><p>ეს არის სპეციალური რეჟიმი ინდ. მეწარმეებისთვის, სადაც ბრუნვაზე იხდიან მხოლოდ 1%-ს (500,000 ლარამდე).</p></details>
+        `,
         seo: `
           <h2>როგორ ითვლება ხელფასის გადასახადები საქართველოში?</h2>
-          <p>საქართველოში დაქირავებული თანამშრომლისთვის ძირითადი გადასახადებია: <strong>საშემოსავლო გადასახადი 20%</strong> და <strong>საპენსიო შენატანი 2%</strong>. შესაბამისად, ბრუტო (გროს) ხელფასიდან თანამშრომელი იღებს 78%-ს.</p>
-          <h2>რა არის გროსი და ნეტო?</h2>
-          <p><strong>გროსი (Gross)</strong> არის ხელფასი, რომელიც დარიცხულია გადასახადების გამოკლებამდე. <strong>ნეტო (Net)</strong> არის თანხა, რომელსაც თანამშრომელი რეალურად იღებს ხელზე.</p>
-          <h2>ინდივიდუალური მეწარმე (მცირე ბიზნესის სტატუსი)</h2>
-          <p>მცირე ბიზნესის სტატუსის მქონე პირები იხდიან მხოლოდ <strong>1%-ს</strong> ბრუნვიდან, წლიური 500,000 ლარის ლიმიტის ფარგლებში.</p>
+          <p>საქართველოში დაქირავებული თანამშრომლისთვის ძირითადი გადასახადებია: <strong>საშემოსავლო გადასახადი 20%</strong> და <strong>საპენსიო შენატანი 2%</strong>.</p>
         `
       },
       en: {
@@ -195,6 +223,11 @@
         ad: "📢 Ad Space (AdSense)",
         share: "🔗 Share with friends",
         shareAlert: "Link copied!",
+        saveBtn: "💾 Save Calculation",
+        savedAlert: "Saved to history!",
+        historyTitle: "Saved Calculations",
+        clearBtn: "🗑️ Clear History",
+        noHistory: "History is empty.",
         noteEmp: "Calculation: Income tax 20% + Pension 2%. Total net = Gross × 0.78.",
         noteSb: "Small business status: 1% on turnover. Annual limit 500,000 ₾.",
         noteEmpr: "Employer cost = Gross + 2% pension (employer share).",
@@ -209,13 +242,15 @@
         remaining: "Remaining (Net)",
         totalCost: "Total Cost",
         empNet: "Employee Net",
+        faqTitle: "Frequently Asked Questions (FAQ)",
+        faq: `
+          <details><summary>What is the difference between Gross and Net?</summary><p>Gross is the salary before taxes, Net is the amount the employee actually receives.</p></details>
+          <details><summary>What is the income tax rate in 2026?</summary><p>In Georgia, the income tax is a flat rate of 20%.</p></details>
+          <details><summary>What is Small Business Status?</summary><p>It's a special tax regime for individual entrepreneurs paying only 1% on turnover up to 500,000 GEL.</p></details>
+        `,
         seo: `
           <h2>How are salary taxes calculated in Georgia?</h2>
-          <p>In Georgia, the main taxes for an employee are: <strong>Income tax 20%</strong> and <strong>Pension contribution 2%</strong>. Therefore, from the gross salary, the employee receives 78%.</p>
-          <h2>What is Gross and Net?</h2>
-          <p><strong>Gross</strong> is the salary calculated before tax deductions. <strong>Net</strong> is the amount the employee actually receives in hand.</p>
-          <h2>Individual Entrepreneur (Small Business Status)</h2>
-          <p>Individuals with small business status pay only <strong>1%</strong> on turnover, within the annual limit of 500,000 GEL.</p>
+          <p>In Georgia, the main taxes for an employee are: <strong>Income tax 20%</strong> and <strong>Pension contribution 2%</strong>.</p>
         `
       },
       ru: {
@@ -232,6 +267,11 @@
         ad: "📢 Место для рекламы (AdSense)",
         share: "🔗 Поделиться с друзьями",
         shareAlert: "Ссылка скопирована!",
+        saveBtn: "💾 Сохранить расчет",
+        savedAlert: "Сохранено в историю!",
+        historyTitle: "Сохраненные расчеты",
+        clearBtn: "🗑️ Очистить историю",
+        noHistory: "История пуста.",
         noteEmp: "Расчет: Подоходный налог 20% + Пенсия 2%. Итого на руки = Гросс × 0.78.",
         noteSb: "Статус малого бизнеса: 1% с оборота. Годовой лимит 500,000 ₾.",
         noteEmpr: "Расходы работодателя = Гросс + 2% пенсия (доля работодателя).",
@@ -246,13 +286,15 @@
         remaining: "Остаток (Нет)",
         totalCost: "Общие расходы",
         empNet: "На руки сотруднику",
+        faqTitle: "Часто задаваемые вопросы (FAQ)",
+        faq: `
+          <details><summary>В чем разница между Гросс и Нет?</summary><p>Гросс — это зарплата до вычета налогов, Нет — сумма, которую сотрудник фактически получает на руки.</p></details>
+          <details><summary>Какова ставка подоходного налога в 2026 году?</summary><p>В Грузии подоходный налог составляет 20%.</p></details>
+          <details><summary>Что такое статус малого бизнеса?</summary><p>Это специальный режим для ИП, при котором платится всего 1% с оборота до 500 000 лари.</p></details>
+        `,
         seo: `
           <h2>Как рассчитываются налоги на зарплату в Грузии?</h2>
-          <p>В Грузии основными налогами для сотрудника являются: <strong>подоходный налог 20%</strong> и <strong>пенсионный взнос 2%</strong>. Таким образом, из gross-зарплаты сотрудник получает 78%.</p>
-          <h2>Что такое Гросс и Нет?</h2>
-          <p><strong>Гросс</strong> — это зарплата, рассчитанная до вычета налогов. <strong>Нет</strong> — это сумма, которую сотрудник фактически получает на руки.</p>
-          <h2>Индивидуальный предприниматель (Статус малого бизнеса)</h2>
-          <p>Лица со статусом малого бизнеса платят только <strong>1%</strong> с оборота в пределах годового лимита в 500 000 лари.</p>
+          <p>В Грузии основными налогами для сотрудника являются: <strong>подоходный налог 20%</strong> и <strong>пенсионный взнос 2%</strong>.</p>
         `
       }
     };
@@ -260,8 +302,9 @@
     let currentLang = localStorage.getItem('lang') || 'ka';
     let currentMode = 'employee';
     let isGrossToNet = true;
+    let historyData = JSON.parse(localStorage.getItem('calcHistory')) || [];
+    let currentResultData = null; // Stores data to save
 
-    // --- DOM ELEMENTS ---
     const amountInput = document.getElementById('amount');
     const calcBtn = document.getElementById('t-btn-calc');
     const resultBox = document.getElementById('result');
@@ -272,11 +315,14 @@
     const inputLabel = document.getElementById('t-input-label');
     const langSelect = document.getElementById('langSelect');
     const themeToggle = document.getElementById('themeToggle');
+    const historyBox = document.getElementById('historyBox');
+    const historyList = document.getElementById('historyList');
+    const saveBtn = document.getElementById('t-save-btn');
 
-    // --- INITIALIZATION ---
     function init() {
       langSelect.value = currentLang;
       applyLanguage(currentLang);
+      renderHistory();
       
       if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
@@ -284,7 +330,6 @@
       }
     }
 
-    // --- THEME TOGGLE ---
     function toggleTheme() {
       document.body.classList.toggle('dark-mode');
       if (document.body.classList.contains('dark-mode')) {
@@ -296,18 +341,16 @@
       }
     }
 
-    // --- LANGUAGE SWITCH ---
     function changeLanguage(lang) {
       currentLang = lang;
       localStorage.setItem('lang', lang);
       applyLanguage(lang);
       resultBox.classList.remove('show');
+      renderHistory(); // Re-render history to update dates etc
     }
 
     function applyLanguage(lang) {
       const t = translations[lang];
-      
-      // Update all static text elements
       document.getElementById('t-title').textContent = t.title;
       document.getElementById('t-subtitle').textContent = t.subtitle;
       document.getElementById('t-tab-emp').textContent = t.tabEmp;
@@ -316,13 +359,18 @@
       document.getElementById('t-btn-calc').textContent = t.btnCalc;
       document.getElementById('t-ad').textContent = t.ad;
       document.getElementById('t-share').textContent = t.share;
+      document.getElementById('t-save-btn').textContent = t.saveBtn;
+      document.getElementById('t-history-title').textContent = t.historyTitle;
+      document.getElementById('t-clear-btn').textContent = t.clearBtn;
+      
+      // Inject FAQ and SEO
+      const faqSec = document.getElementById('t-faq-section');
+      faqSec.innerHTML = `<h2 style="text-align:center; margin-bottom:15px;">${t.faqTitle}</h2>` + t.faq;
       document.getElementById('t-seo-content').innerHTML = t.seo;
       
-      // Update dynamic elements based on current state
       updateUI();
     }
 
-    // --- TABS ---
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -333,7 +381,6 @@
       });
     });
 
-    // --- DIRECTION TOGGLE ---
     directionBtn.addEventListener('click', () => {
       isGrossToNet = !isGrossToNet;
       resultBox.classList.remove('show');
@@ -349,11 +396,10 @@
       noteText.textContent = notes[currentMode];
     }
 
-    // --- CALCULATION LOGIC ---
     calcBtn.addEventListener('click', () => {
       const t = translations[currentLang];
       let val = parseFloat(amountInput.value);
-      if (isNaN(val) || val <= 0) { alert(currentLang === 'ka' ? 'შეიყვანე სწორი თანხა' : (currentLang === 'en' ? 'Enter a valid amount' : 'Введите корректную сумму')); return; }
+      if (isNaN(val) || val <= 0) { alert('შეიყვანე სწორი თანხა / Enter valid amount'); return; }
 
       let html = '';
       let gross = val;
@@ -376,6 +422,7 @@
           <div class="result-row"><span>${t.pension}</span><span style="color:#e53e3e">− ${pension.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.totalDed}</span><span>${(incomeTax + pension).toFixed(2)} ₾ (22%)</span></div>
           <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.net}</span><span style="font-size:1.1rem;">${net.toFixed(2)} ₾</span></div>`;
+        currentResultData = { mode: t.tabEmp, input: val, output: net.toFixed(2), type: isGrossToNet ? 'Gross->Net' : 'Net->Gross' };
       
       } else if (currentMode === 'smallbusiness') {
         const tax = gross * 0.01;
@@ -386,25 +433,81 @@
           <div class="result-row"><span>${t.turnover}</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.tax1}</span><span style="color:#e53e3e">− ${tax.toFixed(2)} ₾</span></div>
           <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.remaining}</span><span style="font-size:1.1rem;">${net.toFixed(2)} ₾</span></div>`;
+        currentResultData = { mode: t.tabSb, input: val, output: net.toFixed(2), type: isGrossToNet ? 'Gross->Net' : 'Net->Gross' };
       
       } else {
         const pension = gross * 0.02;
         const totalCost = gross + pension;
-        const net = gross * 0.78;
         
         resultTotal.textContent = `${t.totalCost}: ${totalCost.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>${t.gross}</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.pension} (Employer)</span><span>+ ${pension.toFixed(2)} ₾</span></div>
-          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.totalCost}</span><span style="font-size:1.1rem;">${totalCost.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>${t.empNet}</span><span>${net.toFixed(2)} ₾</span></div>`;
+          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.totalCost}</span><span style="font-size:1.1rem;">${totalCost.toFixed(2)} ₾</span></div>`;
+        currentResultData = { mode: t.tabEmpr, input: val, output: totalCost.toFixed(2), type: 'Cost' };
       }
       
       resultDetails.innerHTML = html;
       resultBox.classList.add('show');
     });
 
-    // --- SHARE ---
+    // --- HISTORY LOGIC ---
+    function saveToHistory() {
+      if (!currentResultData) return;
+      const t = translations[currentLang];
+      
+      const newEntry = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString(),
+        mode: currentResultData.mode,
+        input: currentResultData.input,
+        output: currentResultData.output,
+        type: currentResultData.type
+      };
+      
+      historyData.unshift(newEntry); // Add to beginning
+      if (historyData.length > 10) historyData.pop(); // Keep max 10 items
+      
+      localStorage.setItem('calcHistory', JSON.stringify(historyData));
+      renderHistory();
+      alert(t.savedAlert);
+    }
+
+    function clearHistory() {
+      historyData = [];
+      localStorage.removeItem('calcHistory');
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const t = translations[currentLang];
+      historyList.innerHTML = '';
+      
+      if (historyData.length === 0) {
+        historyList.innerHTML = `<p style="font-size:0.85rem; color:var(--subtitle-color); text-align:center;">${t.noHistory}</p>`;
+        historyBox.classList.remove('show');
+        return;
+      }
+      
+      historyBox.classList.add('show');
+      
+      historyData.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+          <div>
+            <strong>${item.mode}</strong><br>
+            <span style="font-size:0.75rem; color:var(--subtitle-color);">${item.date}</span>
+          </div>
+          <div style="text-align:right;">
+            <span>${item.input} ₾ ➔</span><br>
+            <strong style="color:var(--btn-green);">${item.output} ₾</strong>
+          </div>
+        `;
+        historyList.appendChild(div);
+      });
+    }
+
     function shareLink() {
       const t = translations[currentLang];
       const url = 'https://salary-calculator-five-sigma.vercel.app';
@@ -416,7 +519,6 @@
       }
     }
 
-    // Run Init
     init();
   </script>
 </body>
