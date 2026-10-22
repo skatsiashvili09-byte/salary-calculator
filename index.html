@@ -266,6 +266,13 @@
   <!-- 🖨️ დასაბეჭდი ზონა (უჩინარია ეკრანზე) -->
   <div id="printArea"></div>
 
+  <!-- FOOTER LINKS -->
+  <div style="text-align: center; padding: 20px; margin-top: 20px; font-size: 0.9rem; color: var(--text-muted);">
+    <a href="/privacy.html" style="color: var(--primary); text-decoration: none; font-weight: bold; margin: 0 10px;">კონფიდენციალურობის პოლიტიკა</a> | 
+    <a href="/" style="color: var(--primary); text-decoration: none; font-weight: bold; margin: 0 10px;">მთავარი გვერდი</a>
+    <p style="margin-top: 10px;">© 2026 ხელფასის კალკულატორი. ყველა უფლება დაცულია.</p>
+  </div>
+
   <script>
     const translations = {
       ka: {
@@ -734,7 +741,6 @@
       }
     }
 
-    // 🖨️ ახალი ბეჭდვის ფუნქცია (მუშაობს ყველა მოწყობილობაზე იდეალურად)
     function downloadPDF() {
       const t = translations[currentLang];
       const printArea = document.getElementById('printArea');
@@ -773,7 +779,6 @@
         </div>
       `;
 
-      // ვიძახებთ ბრაუზერის ჩაშენებულ ბეჭდვას
       window.print();
     }
 
@@ -781,7 +786,7 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js?v=6');
+        navigator.serviceWorker.register('/sw.js?v=7');
       });
     }
   </script>
