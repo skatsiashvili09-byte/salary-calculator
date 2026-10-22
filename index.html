@@ -3,29 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ხელფასის კალკულატორი 2026 — გროსი ↔ ნეტო | საქართველო</title>
+  <meta name="description" content="უფასო ხელფასის კალკულატორი საქართველოსთვის 2026. გამოთვალე წმინდა ხელფასი, საშემოსავლო გადასახადი (20%), საპენსიო (2%) და ინდ. მეწარმის 1%.">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #f5f7fa; color: #1a202c; padding: 20px; }
-    .container { max-width: 520px; margin: 20px auto; background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-    h1 { font-size: 1.5rem; margin-bottom: 4px; color: #1a202c; }
-    .subtitle { color: #718096; font-size: 0.9rem; margin-bottom: 24px; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f5f7fa; color: #1a202c; padding: 20px; line-height: 1.6; }
+    .container { max-width: 560px; margin: 20px auto; background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    h1 { font-size: 1.6rem; margin-bottom: 4px; color: #1a202c; text-align: center; }
+    .subtitle { color: #718096; font-size: 0.9rem; margin-bottom: 24px; text-align: center; }
+    
     .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
     .tab { flex: 1; min-width: 100px; padding: 10px 6px; border: 1px solid #e2e8f0; background: #f7fafc; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #4a5568; transition: all 0.15s; }
     .tab.active { background: #1a202c; color: white; border-color: #1a202c; }
+    
+    .direction-toggle { display: flex; justify-content: center; margin-bottom: 16px; }
+    .btn-toggle { padding: 8px 16px; border-radius: 20px; border: 1px solid #3182ce; background: white; color: #3182ce; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.85rem;}
+    .btn-toggle:hover { background: #ebf8ff; }
+    
     label { display: block; font-size: 0.85rem; font-weight: 600; color: #4a5568; margin-bottom: 6px; }
     .input-row { display: flex; gap: 10px; margin-bottom: 16px; }
-    input[type="number"] { flex: 1; padding: 12px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 1.1rem; font-weight: 600; outline: none; width: 100%; }
-    input[type="number"]:focus { border-color: #3182ce; }
-    .btn-calc { width: 100%; padding: 14px; background: #3182ce; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    input[type="number"] { flex: 1; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 1.1rem; font-weight: 600; outline: none; width: 100%; }
+    input[type="number"]:focus { border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.1); }
+    
+    .btn-calc { width: 100%; padding: 14px; background: #3182ce; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; margin-bottom: 10px;}
     .btn-calc:hover { background: #2b6cb0; }
-    .result { margin-top: 24px; padding: 20px; background: #f0fff4; border: 1.5px solid #9ae6b4; border-radius: 12px; display: none; }
-    .result.show { display: block; }
-    .result-total { font-size: 1.6rem; font-weight: 800; color: #22543d; margin-bottom: 12px; }
-    .result-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; border-bottom: 1px dashed #c6f6d5; }
+    
+    .result { margin-top: 20px; padding: 20px; background: #f0fff4; border: 1.5px solid #9ae6b4; border-radius: 12px; display: none; }
+    .result.show { display: block; animation: fadeIn 0.3s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .result-total { font-size: 1.8rem; font-weight: 800; color: #22543d; margin-bottom: 16px; text-align: center;}
+    .result-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.95rem; border-bottom: 1px dashed #c6f6d5; }
     .result-row:last-child { border-bottom: none; }
     .result-row span:last-child { font-weight: 700; }
-    .note { font-size: 0.78rem; color: #718096; margin-top: 16px; line-height: 1.5; }
-    .ad-slot { margin-top: 24px; min-height: 90px; background: #edf2f7; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #a0aec0; font-size: 0.8rem; }
+    
+    .note { font-size: 0.8rem; color: #718096; margin-top: 16px; text-align: center;}
+    .ad-slot { margin-top: 24px; min-height: 100px; background: #edf2f7; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #a0aec0; font-size: 0.8rem; border: 1px dashed #cbd5e0;}
+    
+    .seo-content { margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+    .seo-content h2 { font-size: 1.2rem; margin-bottom: 10px; color: #2d3748; }
+    .seo-content p { font-size: 0.9rem; color: #4a5568; margin-bottom: 12px; }
+    
+    .btn-share { display: block; width: 100%; padding: 12px; background: #48bb78; color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 15px; font-size: 0.95rem;}
+    .btn-share:hover { background: #38a169; }
   </style>
 </head>
 <body>
@@ -39,11 +58,15 @@
       <button class="tab" data-mode="employer">დამსაქმებლის ხარჯი</button>
     </div>
 
-    <label for="amount">შეიყვანე თანხა (₾)</label>
+    <div class="direction-toggle">
+      <button class="btn-toggle" id="directionBtn">მიმართულება: გროსი → ნეტო</button>
+    </div>
+
+    <label for="amount" id="inputLabel">შეიყვანე გროს ხელფასი (₾)</label>
     <div class="input-row">
       <input type="number" id="amount" placeholder="მაგ: 2000" min="0" step="10">
     </div>
-    <button class="btn-calc" id="calcBtn">გროსი → ნეტო</button>
+    <button class="btn-calc" id="calcBtn">გამოთვლა</button>
 
     <div class="result" id="result">
       <div class="result-total" id="resultTotal"></div>
@@ -51,7 +74,19 @@
     </div>
 
     <div class="ad-slot">📢 რეკლამის ადგილი (AdSense)</div>
+    
+    <a href="https://salary-calculator-five-sigma.vercel.app" class="btn-share" onclick="shareLink(event)">🔗 გაუზიარე მეგობრებს</a>
+    
     <p class="note" id="noteText"></p>
+
+    <div class="seo-content">
+      <h2>როგორ ითვლება ხელფასის გადასახადები საქართველოში?</h2>
+      <p>საქართველოში დაქირავებული თანამშრომლისთვის ძირითადი გადასახადებია: <strong>საშემოსავლო გადასახადი 20%</strong> და <strong>საპენსიო შენატანი 2%</strong>. შესაბამისად, ბრუტო (გროს) ხელფასიდან თანამშრომელი იღებს 78%-ს.</p>
+      <h2>რა არის გროსი და ნეტო?</h2>
+      <p><strong>გროსი (Gross)</strong> არის ხელფასი, რომელიც დარიცხულია გადასახადების გამოკლებამდე. <strong>ნეტო (Net)</strong> არის თანხა, რომელსაც თანამშრომელი რეალურად იღებს ხელზე.</p>
+      <h2>ინდივიდუალური მეწარმე (მცირე ბიზნესის სტატუსი)</h2>
+      <p>მცირე ბიზნესის სტატუსის მქონე პირები იხდიან მხოლოდ <strong>1%-ს</strong> ბრუნვიდან, წლიური 500,000 ლარის ლიმიტის ფარგლებში. ეს რეჟიმი ბევრად უფრო მომგებიანია ფრილანსერებისთვის.</p>
+    </div>
   </div>
 
   <script>
@@ -61,20 +96,39 @@
     const resultTotal = document.getElementById('resultTotal');
     const resultDetails = document.getElementById('resultDetails');
     const noteText = document.getElementById('noteText');
+    const directionBtn = document.getElementById('directionBtn');
+    const inputLabel = document.getElementById('inputLabel');
+    
     let currentMode = 'employee';
+    let isGrossToNet = true; // true = გროსიდან ნეტოში, false = ნეტოდან გროსში
 
+    // ტაბების შეცვლა
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         currentMode = tab.dataset.mode;
         resultBox.classList.remove('show');
-        calcBtn.textContent = currentMode === 'employer' ? 'გამოთვლა' : 'გროსი → ნეტო';
-        updateNote();
+        updateUI();
       });
     });
 
-    function updateNote() {
+    // მიმართულების შეცვლა (გროსი/ნეტო)
+    directionBtn.addEventListener('click', () => {
+      isGrossToNet = !isGrossToNet;
+      resultBox.classList.remove('show');
+      updateUI();
+    });
+
+    function updateUI() {
+      if (isGrossToNet) {
+        directionBtn.textContent = 'მიმართულება: გროსი → ნეტო';
+        inputLabel.textContent = currentMode === 'employer' ? 'შეიყვანე გროს ხელფასი (₾)' : 'შეიყვანე გროს ხელფასი/ბრუნვა (₾)';
+      } else {
+        directionBtn.textContent = 'მიმართულება: ნეტო → გროსი';
+        inputLabel.textContent = currentMode === 'employer' ? 'შეიყვანე სასურველი ნეტო (₾)' : 'შეიყვანე სასურველი ნეტო თანხა (₾)';
+      }
+
       const notes = {
         employee: 'გაანგარიშება: საშემოსავლო 20% + საპენსიო 2%. სულ ხელზე = გროსი × 0.78.',
         smallbusiness: 'მცირე ბიზნესის სტატუსი: 1% ბრუნვაზე. წლიური ლიმიტი 500,000 ₾.',
@@ -83,43 +137,75 @@
       noteText.textContent = notes[currentMode];
     }
 
+    // გამოთვლა
     calcBtn.addEventListener('click', () => {
-      const gross = parseFloat(amountInput.value);
-      if (isNaN(gross) || gross <= 0) { alert('შეიყვანე სწორი თანხა'); return; }
+      let val = parseFloat(amountInput.value);
+      if (isNaN(val) || val <= 0) { alert('შეიყვანე სწორი თანხა'); return; }
 
       let html = '';
+      let gross = val;
+
+      // თუ ნეტოდან ვითვლით, ჯერ ვიპოვოთ გროსი
+      if (!isGrossToNet) {
+        if (currentMode === 'employee') gross = val / 0.78;
+        else if (currentMode === 'smallbusiness') gross = val / 0.99;
+        else if (currentMode === 'employer') gross = val / 0.78; // ვთვლით რომ ნეტო 78%-ია
+      }
+
       if (currentMode === 'employee') {
         const incomeTax = gross * 0.20;
         const pension = gross * 0.02;
-        const net = gross - incomeTax - pension;
-        resultTotal.textContent = `ხელზე: ${net.toFixed(2)} ₾`;
+        const net = gross * 0.78;
+        
+        resultTotal.textContent = isGrossToNet ? `ხელზე: ${net.toFixed(2)} ₾` : `საჭირო გროსი: ${gross.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>გროს ხელფასი</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>საშემოსავლო (20%)</span><span style="color:#c53030">− ${incomeTax.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>საპენსიო (2%)</span><span style="color:#c53030">− ${pension.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>სულ გამოქვითვა</span><span>${(incomeTax + pension).toFixed(2)} ₾ (22%)</span></div>`;
+          <div class="result-row"><span>სულ გამოქვითვა</span><span>${(incomeTax + pension).toFixed(2)} ₾ (22%)</span></div>
+          <div class="result-row" style="border-top: 1.5px solid #9ae6b4; padding-top: 10px; margin-top: 5px;"><span>ნეტო (ხელზე)</span><span style="color:#22543d; font-size:1.1rem;">${net.toFixed(2)} ₾</span></div>`;
+      
       } else if (currentMode === 'smallbusiness') {
         const tax = gross * 0.01;
-        const net = gross - tax;
-        resultTotal.textContent = `ნეტო: ${net.toFixed(2)} ₾`;
+        const net = gross * 0.99;
+        
+        resultTotal.textContent = isGrossToNet ? `ნეტო: ${net.toFixed(2)} ₾` : `საჭირო ბრუნვა: ${gross.toFixed(2)} ₾`;
         html = `
-          <div class="result-row"><span>ბრუნვა</span><span>${gross.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>ბრუნვა (გროსი)</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>გადასახადი (1%)</span><span style="color:#c53030">− ${tax.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>დარჩენილი</span><span>${net.toFixed(2)} ₾</span></div>`;
+          <div class="result-row" style="border-top: 1.5px solid #9ae6b4; padding-top: 10px; margin-top: 5px;"><span>დარჩენილი (ნეტო)</span><span style="color:#22543d; font-size:1.1rem;">${net.toFixed(2)} ₾</span></div>`;
+      
       } else {
+        // დამსაქმებლის ხარჯი
         const pension = gross * 0.02;
-        const total = gross + pension;
-        resultTotal.textContent = `დამსაქმებლის ხარჯი: ${total.toFixed(2)} ₾`;
+        const totalCost = gross + pension;
+        const net = gross * 0.78;
+        
+        resultTotal.textContent = `დამსაქმებლის ხარჯი: ${totalCost.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>გროს ხელფასი</span><span>${gross.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>საპენსიო (2%)</span><span>+ ${pension.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>სულ ხარჯი</span><span>${total.toFixed(2)} ₾</span></div>`;
+          <div class="result-row"><span>საპენსიო (დამსაქმებელი, 2%)</span><span>+ ${pension.toFixed(2)} ₾</span></div>
+          <div class="result-row" style="border-top: 1.5px solid #9ae6b4; padding-top: 10px; margin-top: 5px;"><span>სულ ხარჯი</span><span style="color:#22543d; font-size:1.1rem;">${totalCost.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>თანამშრომლის ნეტო (ხელზე)</span><span>${net.toFixed(2)} ₾</span></div>`;
       }
+      
       resultDetails.innerHTML = html;
       resultBox.classList.add('show');
     });
 
-    updateNote();
+    // გაზიარების ფუნქცია
+    function shareLink(e) {
+      e.preventDefault();
+      const url = 'https://salary-calculator-five-sigma.vercel.app';
+      if (navigator.share) {
+        navigator.share({ title: 'ხელფასის კალკულატორი', url: url });
+      } else {
+        navigator.clipboard.writeText(url);
+        alert('ლინკი დაკოპირებულია! გაუზიარე მეგობრებს.');
+      }
+    }
+
+    updateUI();
   </script>
 </body>
 </html>
