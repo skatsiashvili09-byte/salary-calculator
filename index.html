@@ -4,13 +4,13 @@
   <!-- AdSense Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2088263543892073" crossorigin="anonymous"></script>
   
-  <!-- Google Analytics (შემდეგ შეცვალე G-XXXXXXXXXX შენი ID-ით) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <!-- Google Analytics Code -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-29MFG3DN4C"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
+    gtag('config', 'G-29MFG3DN4C');
   </script>
 
   <link rel="manifest" href="/manifest.json">
@@ -261,7 +261,7 @@
     <button class="btn-calc" style="margin-top: 20px;" id="t-compare-btn" onclick="compareOffers()">შედარება</button>
   </div>
 
-  <!-- 🏖️ VACATION CALCULATOR (NEW) -->
+  <!-- 🏖️ VACATION CALCULATOR -->
   <div class="container">
     <h1 id="t-vac-title" style="color: var(--primary);">შვებულების კალკულატორი</h1>
     <p class="subtitle" id="t-vac-subtitle">გაიგე რამდენს მიიღებ შვებულების დროს</p>
@@ -328,7 +328,7 @@
   <div class="container">
     <div class="faq-section" id="t-faq-section"></div>
     
-    <!-- BLOG SECTION (NEW) -->
+    <!-- BLOG SECTION -->
     <div class="seo-content" style="margin-top: 40px; border-top: 2px solid var(--border-color); padding-top: 32px;">
       <h2 style="text-align: center; margin-bottom: 24px;" id="t-blog-title">📚 სასარგებლო სტატიები</h2>
       
@@ -805,7 +805,6 @@
         return;
       }
 
-      // Georgian standard: Average daily wage = Monthly Salary / 30
       const dailyWage = salary / 30;
       const vacationPay = dailyWage * days;
 
@@ -1008,7 +1007,7 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js?v=10');
+        navigator.serviceWorker.register('/sw.js?v=11');
       });
     }
   </script>
