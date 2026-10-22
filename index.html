@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f5f7fa; color: #1a202c; padding: 20px; }
+    .container { max-width: 520px; margin: 20px auto; background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    h1 { font-size: 1.5rem; margin-bottom: 4px; color: #1a202c; }
+    .subtitle { color: #718096; font-size: 0.9rem; margin-bottom: 24px; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .tab { flex: 1; min-width: 100px; padding: 10px 6px; border: 1px solid #e2e8f0; background: #f7fafc; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #4a5568; transition: all 0.15s; }
+    .tab.active { background: #1a202c; color: white; border-color: #1a202c; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; color: #4a5568; margin-bottom: 6px; }
+    .input-row { display: flex; gap: 10px; margin-bottom: 16px; }
+    input[type="number"] { flex: 1; padding: 12px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 1.1rem; font-weight: 600; outline: none; width: 100%; }
+    input[type="number"]:focus { border-color: #3182ce; }
+    .btn-calc { width: 100%; padding: 14px; background: #3182ce; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .btn-calc:hover { background: #2b6cb0; }
+    .result { margin-top: 24px; padding: 20px; background: #f0fff4; border: 1.5px solid #9ae6b4; border-radius: 12px; display: none; }
+    .result.show { display: block; }
+    .result-total { font-size: 1.6rem; font-weight: 800; color: #22543d; margin-bottom: 12px; }
+    .result-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; border-bottom: 1px dashed #c6f6d5; }
+    .result-row:last-child { border-bottom: none; }
+    .result-row span:last-child { font-weight: 700; }
+    .note { font-size: 0.78rem; color: #718096; margin-top: 16px; line-height: 1.5; }
+    .ad-slot { margin-top: 24px; min-height: 90px; background: #edf2f7; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #a0aec0; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ხელფასის კალკულატორი</h1>
+    <p class="subtitle">საქართველო · 2026 წლის გადასახადები</p>
+
+    <div class="tabs">
+      <button class="tab active" data-mode="employee">დაქირავებული</button>
+      <button class="tab" data-mode="smallbusiness">ინდ. მეწარმე (1%)</button>
+      <button class="tab" data-mode="employer">დამსაქმებლის ხარჯი</button>
+    </div>
+
+    <label for="amount">შეიყვანე თანხა (₾)</label>
+    <div class="input-row">
+      <input type="number" id="amount" placeholder="მაგ: 2000" min="0" step="10">
+    </div>
+    <button class="btn-calc" id="calcBtn">გროსი → ნეტო</button>
+
+    <div class="result" id="result">
+      <div class="result-total" id="resultTotal"></div>
+      <div id="resultDetails"></div>
+    </div>
+
+    <div class="ad-slot">📢 რეკლამის ადგილი (AdSense)</div>
+    <p class="note" id="noteText"></p>
+  </div>
+
+  <script>
+    const amountInput = document.getElementById('amount');
+    const calcBtn = document.getElementById('calcBtn');
+    const resultBox = document.getElementById('result');
+    const resultTotal = document.getElementById('resultTotal');
+    const resultDetails = document.getElementById('resultDetails');
+    const noteText = document.getElementById('noteText');
+    let currentMode = 'employee';
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentMode = tab.dataset.mode;
+        resultBox.classList.remove('show');
+        calcBtn.textContent = currentMode === 'employer' ? 'გამოთვლა' : 'გროსი → ნეტო';
+        updateNote();
+      });
+    });
+
+    function updateNote() {
+      const notes = {
+        employee: 'გაანგარიშება: საშემოსავლო 20% + საპენსიო 2%. სულ ხელზე = გროსი × 0.78.',
+        smallbusiness: 'მცირე ბიზნესის სტატუსი: 1% ბრუნვაზე. წლიური ლიმიტი 500,000 ₾.',
+        employer: 'დამსაქმებლის ხარჯი = გროსი + 2% საპენსიო (დამსაქმებლის წილი).'
+      };
+      noteText.textContent = notes[currentMode];
+    }
+
+    calcBtn.addEventListener('click', () => {
+      const gross = parseFloat(amountInput.value);
+      if (isNaN(gross) || gross <= 0) { alert('შეიყვანე სწორი თანხა'); return; }
+
+      let html = '';
+      if (currentMode === 'employee') {
+        const incomeTax = gross * 0.20;
+        const pension = gross * 0.02;
+        const net = gross - incomeTax - pension;
+        resultTotal.textContent = `ხელზე: ${net.toFixed(2)} ₾`;
+        html = `
+          <div class="result-row"><span>გროს ხელფასი</span><span>${gross.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>საშემოსავლო (20%)</span><span style="color:#c53030">− ${incomeTax.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>საპენსიო (2%)</span><span style="color:#c53030">− ${pension.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>სულ გამოქვითვა</span><span>${(incomeTax + pension).toFixed(2)} ₾ (22%)</span></div>`;
+      } else if (currentMode === 'smallbusiness') {
+        const tax = gross * 0.01;
+        const net = gross - tax;
+        resultTotal.textContent = `ნეტო: ${net.toFixed(2)} ₾`;
+        html = `
+          <div class="result-row"><span>ბრუნვა</span><span>${gross.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>გადასახადი (1%)</span><span style="color:#c53030">− ${tax.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>დარჩენილი</span><span>${net.toFixed(2)} ₾</span></div>`;
+      } else {
+        const pension = gross * 0.02;
+        const total = gross + pension;
+        resultTotal.textContent = `დამსაქმებლის ხარჯი: ${total.toFixed(2)} ₾`;
+        html = `
+          <div class="result-row"><span>გროს ხელფასი</span><span>${gross.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>საპენსიო (2%)</span><span>+ ${pension.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>სულ ხარჯი</span><span>${total.toFixed(2)} ₾</span></div>`;
+      }
+      resultDetails.innerHTML = html;
+      resultBox.classList.add('show');
+    });
+
+    updateNote();
+  </script>
+</body>
+</html>
