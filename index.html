@@ -2,7 +2,7 @@
 <html lang="ka">
 <head>
   <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://placehold.co/180x180/3182ce/ffffff.png?text=GEL">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://placehold.co/180x180/4f46e5/ffffff.png?text=GEL">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta charset="UTF-8">
@@ -10,127 +10,137 @@
   <title>ხელფასის კალკულატორი | Salary Calculator</title>
   <meta name="description" content="უფასო ხელფასის კალკულატორი საქართველოსთვის 2026. Free salary calculator for Georgia 2026.">
   
-  <!-- Google Fonts - უფრო ლამაზი შრიფტისთვის -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
-      --bg-color: #f8fafc;
-      --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #ebf4ff 100%);
-      --container-bg: #ffffff;
-      --text-color: #0f172a;
-      --subtitle-color: #64748b;
-      --border-color: #e2e8f0;
-      --input-bg: #f8fafc;
-      --input-border: #cbd5e1;
-      --tab-bg: #f1f5f9;
-      --tab-text: #475569;
-      --tab-active-bg: #2563eb;
-      --tab-active-text: #ffffff;
-      --result-bg: #f0fdf4;
-      --result-border: #bbf7d0;
-      --result-text: #166534;
-      --ad-bg: #f1f5f9;
-      --ad-text: #94a3b8;
-      --btn-blue: #2563eb;
-      --btn-blue-hover: #1d4ed8;
-      --btn-green: #22c55e;
-      --btn-green-hover: #16a34a;
-      --btn-red: #ef4444;
-      --btn-orange: #f97316;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-      --history-bg: #f8fafc;
+      /* ახალი პრემიუმ ფერები */
+      --bg-mesh: radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,0) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,0) 0, transparent 50%);
+      --bg-color: #f3f4f6;
+      --container-bg: rgba(255, 255, 255, 0.95);
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      
+      --primary: #4f46e5; /* Indigo */
+      --primary-hover: #4338ca;
+      --success: #10b981; /* Emerald */
+      --success-hover: #059669;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      
+      --input-bg: #f9fafb;
+      --tab-bg: #f3f4f6;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
     }
 
     body.dark-mode {
+      --bg-mesh: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,0.1) 0, transparent 50%);
       --bg-color: #0f172a;
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      --container-bg: #1e293b;
-      --text-color: #f8fafc;
-      --subtitle-color: #94a3b8;
+      --container-bg: rgba(30, 41, 59, 0.95);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --border-color: #334155;
+      
+      --primary: #6366f1;
+      --primary-hover: #818cf8;
       --input-bg: #0f172a;
-      --input-border: #475569;
-      --tab-bg: #334155;
-      --tab-text: #cbd5e1;
-      --tab-active-bg: #3b82f6;
-      --tab-active-text: #ffffff;
-      --result-bg: #064e3b;
-      --result-border: #047857;
-      --result-text: #d1fae5;
-      --ad-bg: #334155;
-      --ad-text: #cbd5e1;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-      --history-bg: #334155;
+      --tab-bg: #1e293b;
+      
+      --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.5);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; }
-    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg-gradient); color: var(--text-color); padding: 20px; line-height: 1.6; min-height: 100vh;}
+    * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+    body { 
+      font-family: 'Manrope', system-ui, -apple-system, sans-serif; 
+      background-color: var(--bg-color); 
+      background-image: var(--bg-mesh);
+      color: var(--text-main); 
+      padding: 20px; 
+      line-height: 1.6; 
+      min-height: 100vh;
+      background-attachment: fixed;
+    }
     
-    .top-controls { display: flex; justify-content: space-between; align-items: center; max-width: 600px; margin: 0 auto 20px auto; }
-    .lang-select { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-color); font-weight: 600; cursor: pointer; outline: none; font-family: 'Inter', sans-serif; box-shadow: var(--shadow);}
-    .btn-icon { background: var(--container-bg); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 1.2rem; color: var(--text-color); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow);}
+    .top-controls { display: flex; justify-content: space-between; align-items: center; max-width: 650px; margin: 0 auto 24px auto; }
+    .lang-select { padding: 12px 16px; border-radius: 14px; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-main); font-weight: 700; cursor: pointer; outline: none; font-family: 'Manrope', sans-serif; box-shadow: var(--shadow-sm); font-size: 0.9rem;}
+    .btn-icon { background: var(--container-bg); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 14px; cursor: pointer; font-size: 1.2rem; color: var(--text-main); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);}
     
-    .container { max-width: 600px; margin: 0 auto 20px auto; background: var(--container-bg); border-radius: 20px; padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border-color);}
-    h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 4px; color: var(--text-color); text-align: center; letter-spacing: -0.5px;}
-    .subtitle { color: var(--subtitle-color); font-size: 0.95rem; margin-bottom: 24px; text-align: center; font-weight: 500;}
+    .container { 
+      max-width: 650px; 
+      margin: 0 auto 24px auto; 
+      background: var(--container-bg); 
+      border-radius: 28px; 
+      padding: 32px; 
+      box-shadow: var(--shadow-xl); 
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
     
-    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-    .tab { flex: 1; min-width: 100px; padding: 12px 8px; border: 1px solid var(--border-color); background: var(--tab-bg); border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--tab-text); font-family: 'Inter', sans-serif;}
-    .tab.active { background: var(--tab-active-bg); color: var(--tab-active-text); border-color: var(--tab-active-bg); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);}
+    h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; color: var(--text-main); text-align: center; letter-spacing: -0.5px;}
+    .subtitle { color: var(--text-muted); font-size: 1rem; margin-bottom: 28px; text-align: center; font-weight: 500;}
     
-    .direction-toggle { display: flex; justify-content: center; margin-bottom: 20px; }
-    .btn-toggle { padding: 10px 20px; border-radius: 30px; border: 1px solid var(--btn-blue); background: transparent; color: var(--btn-blue); font-weight: 600; cursor: pointer; font-size: 0.9rem; font-family: 'Inter', sans-serif;}
-    .btn-toggle:hover { background: rgba(37, 99, 235, 0.1); }
+    .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; background: var(--tab-bg); padding: 6px; border-radius: 16px;}
+    .tab { flex: 1; min-width: 100px; padding: 14px 10px; border: none; background: transparent; border-radius: 12px; cursor: pointer; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); font-family: 'Manrope', sans-serif; transition: all 0.2s;}
+    .tab.active { background: var(--container-bg); color: var(--primary); box-shadow: var(--shadow-md);}
     
-    label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--subtitle-color); margin-bottom: 8px; }
-    .input-row { display: flex; gap: 10px; margin-bottom: 20px; }
-    input[type="number"], select { flex: 1; padding: 16px; border: 1.5px solid var(--input-border); border-radius: 12px; font-size: 1.1rem; font-weight: 600; outline: none; width: 100%; background: var(--input-bg); color: var(--text-color); font-family: 'Inter', sans-serif;}
-    input[type="number"]:focus, select:focus { border-color: var(--btn-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
+    .direction-toggle { display: flex; justify-content: center; margin-bottom: 24px; }
+    .btn-toggle { padding: 12px 24px; border-radius: 30px; border: 2px solid var(--primary); background: transparent; color: var(--primary); font-weight: 800; cursor: pointer; font-size: 0.9rem; font-family: 'Manrope', sans-serif; transition: 0.2s;}
+    .btn-toggle:hover { background: var(--primary); color: white; }
     
-    .btn-calc { width: 100%; padding: 16px; background: var(--btn-blue); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 10px; font-family: 'Inter', sans-serif; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);}
-    .btn-calc:hover { background: var(--btn-blue-hover); transform: translateY(-1px); }
+    label { display: block; font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+    .input-row { display: flex; gap: 12px; margin-bottom: 24px; }
+    input[type="number"], select { flex: 1; padding: 18px; border: 2px solid var(--border-color); border-radius: 16px; font-size: 1.2rem; font-weight: 800; outline: none; width: 100%; background: var(--input-bg); color: var(--text-main); font-family: 'Manrope', sans-serif; transition: border-color 0.2s;}
+    input[type="number"]:focus, select:focus { border-color: var(--primary); }
     
-    .result { margin-top: 24px; padding: 24px; background: var(--result-bg); border: 1.5px solid var(--result-border); border-radius: 16px; display: none; }
-    .result.show { display: block; animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .result-total { font-size: 2rem; font-weight: 800; color: var(--result-text); margin-bottom: 20px; text-align: center; letter-spacing: -0.5px;}
-    .result-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 0.95rem; border-bottom: 1px dashed var(--result-border); font-weight: 500;}
+    .btn-calc { width: 100%; padding: 20px; background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%); color: white; border: none; border-radius: 16px; font-size: 1.2rem; font-weight: 800; cursor: pointer; margin-bottom: 10px; font-family: 'Manrope', sans-serif; box-shadow: 0 10px 20px -10px var(--primary); transition: transform 0.1s;}
+    .btn-calc:active { transform: scale(0.98); }
+    
+    .result { margin-top: 24px; padding: 28px; background: var(--container-bg); border: 2px solid var(--border-color); border-radius: 24px; display: none; box-shadow: var(--shadow-lg);}
+    .result.show { display: block; animation: slideUp 0.4s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .result-total { font-size: 2.5rem; font-weight: 800; color: var(--success); margin-bottom: 24px; text-align: center; letter-spacing: -1px;}
+    .result-row { display: flex; justify-content: space-between; padding: 14px 0; font-size: 1rem; border-bottom: 1px solid var(--border-color); font-weight: 600;}
     .result-row:last-child { border-bottom: none; }
-    .result-row span:last-child { font-weight: 700; }
+    .result-row span:last-child { font-weight: 800; }
     
-    .chart-container { max-width: 260px; margin: 20px auto; display: none; }
+    .chart-container { max-width: 280px; margin: 24px auto; display: none; }
     
-    .history-box { margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 20px; display: none; }
+    .history-box { margin-top: 28px; border-top: 2px dashed var(--border-color); padding-top: 24px; display: none; }
     .history-box.show { display: block; }
-    .history-item { background: var(--history-bg); padding: 12px 16px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border: 1px solid var(--border-color); }
-    .btn-save { background: var(--btn-green); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; width: 100%; margin-top: 15px; font-weight: 700; font-family: 'Inter', sans-serif; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);}
-    .btn-clear { background: transparent; color: var(--btn-red); border: 1px solid var(--btn-red); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; margin-top: 15px; width: 100%; font-weight: 600;}
+    .history-item { background: var(--input-bg); padding: 16px 20px; border-radius: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; border: 1px solid var(--border-color); }
+    .btn-save { background: var(--success); color: white; border: none; padding: 16px; border-radius: 16px; cursor: pointer; width: 100%; margin-top: 16px; font-weight: 800; font-family: 'Manrope', sans-serif; font-size: 1rem; box-shadow: 0 8px 16px -8px var(--success);}
+    .btn-clear { background: transparent; color: var(--danger); border: 2px solid var(--danger); padding: 10px 16px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; margin-top: 16px; width: 100%; font-weight: 700;}
 
-    .faq-section { margin-top: 30px; }
-    .faq-section h2 { font-size: 1.3rem; margin-bottom: 15px; text-align: center; font-weight: 700;}
-    details { background: var(--history-bg); padding: 14px 18px; border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); cursor: pointer; }
-    summary { font-weight: 600; font-size: 1rem; outline: none; }
-    details p { margin-top: 12px; font-size: 0.95rem; color: var(--subtitle-color); }
+    .faq-section { margin-top: 32px; }
+    .faq-section h2 { font-size: 1.4rem; margin-bottom: 20px; text-align: center; font-weight: 800;}
+    details { background: var(--input-bg); padding: 18px 24px; border-radius: 16px; margin-bottom: 12px; border: 1px solid var(--border-color); cursor: pointer; }
+    summary { font-weight: 700; font-size: 1rem; outline: none; color: var(--primary);}
+    details p { margin-top: 16px; font-size: 0.95rem; color: var(--text-muted); font-weight: 500;}
 
-    .note { font-size: 0.85rem; color: var(--subtitle-color); margin-top: 16px; text-align: center; font-weight: 500;}
-    .ad-slot { margin-top: 24px; min-height: 100px; background: var(--ad-bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--ad-text); font-size: 0.9rem; border: 1px dashed var(--border-color); font-weight: 600;}
-    .seo-content { margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 25px; }
-    .seo-content h2 { font-size: 1.3rem; margin-bottom: 12px; color: var(--text-color); font-weight: 700;}
-    .seo-content p { font-size: 0.95rem; color: var(--subtitle-color); margin-bottom: 15px; }
-    .btn-share { display: block; width: 100%; padding: 14px; background: var(--btn-green); color: white; text-align: center; text-decoration: none; border-radius: 12px; font-weight: 700; margin-top: 20px; font-size: 1rem; border: none; cursor: pointer; font-family: 'Inter', sans-serif; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);}
+    .note { font-size: 0.9rem; color: var(--text-muted); margin-top: 20px; text-align: center; font-weight: 600;}
+    .ad-slot { margin-top: 24px; min-height: 120px; background: var(--input-bg); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1rem; border: 2px dashed var(--border-color); font-weight: 700;}
+    .seo-content { margin-top: 40px; border-top: 2px solid var(--border-color); padding-top: 32px; }
+    .seo-content h2 { font-size: 1.4rem; margin-bottom: 16px; color: var(--text-main); font-weight: 800;}
+    .seo-content p { font-size: 1rem; color: var(--text-muted); margin-bottom: 16px; font-weight: 500;}
+    .btn-share { display: block; width: 100%; padding: 18px; background: var(--text-main); color: var(--bg-color); text-align: center; text-decoration: none; border-radius: 16px; font-weight: 800; margin-top: 24px; font-size: 1.1rem; border: none; cursor: pointer; font-family: 'Manrope', sans-serif;}
 
-    /* Currency Section Styles */
+    /* Currency Section */
     .currency-section { margin-top: 20px; }
-    .currency-row { display: flex; gap: 10px; margin-bottom: 15px; align-items: center;}
+    .currency-row { display: flex; gap: 12px; margin-bottom: 16px; align-items: center;}
     .currency-row input { flex: 2; }
-    .currency-row select { flex: 1; font-size: 0.95rem; padding: 16px 10px; }
-    .currency-result { text-align: center; font-size: 1.5rem; font-weight: 800; color: var(--btn-blue); margin-top: 15px; padding: 15px; background: var(--history-bg); border-radius: 12px; border: 1px solid var(--border-color); display: none;}
-    .currency-result.show { display: block; }
+    .currency-row select { flex: 1; font-size: 1rem; padding: 18px 10px; }
+    .currency-result { text-align: center; font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-top: 20px; padding: 20px; background: var(--input-bg); border-radius: 16px; border: 2px solid var(--primary); display: none;}
+    .currency-result.show { display: block; animation: slideUp 0.3s ease-out;}
   </style>
 </head>
 <body>
@@ -173,11 +183,11 @@
 
       <div id="resultDetails"></div>
       <button class="btn-save" id="t-save-btn" onclick="saveToHistory()">💾 შენახვა</button>
-      <button class="btn-save" style="background: var(--btn-orange); margin-top: 10px; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);" id="t-pdf-btn" onclick="downloadPDF()">📥 PDF-ად გადმოწერა</button>
+      <button class="btn-save" style="background: var(--warning); margin-top: 12px; box-shadow: 0 8px 16px -8px var(--warning);" id="t-pdf-btn" onclick="downloadPDF()">📥 PDF-ად გადმოწერა</button>
     </div>
 
     <div class="history-box" id="historyBox">
-      <h3 style="font-size: 1.1rem; margin-bottom: 15px; font-weight: 700;" id="t-history-title">ისტორია</h3>
+      <h3 style="font-size: 1.2rem; margin-bottom: 16px; font-weight: 800;" id="t-history-title">ისტორია</h3>
       <div id="historyList"></div>
       <button class="btn-clear" id="t-clear-btn" onclick="clearHistory()">🗑️ ისტორიის გასუფთავება</button>
     </div>
@@ -187,7 +197,7 @@
 
   <!-- CURRENCY CALCULATOR -->
   <div class="container">
-    <h1 id="t-cur-title">ვალუტის კალკულატორი</h1>
+    <h1 id="t-cur-title" style="color: var(--primary);">ვალუტის კალკულატორი</h1>
     <p class="subtitle" id="t-cur-subtitle">ცოცხალი კურსი (ეროვნული ბანკი)</p>
     
     <div class="currency-section">
@@ -205,7 +215,7 @@
       </div>
       
       <div style="text-align: center; margin: 10px 0;">
-        <span style="font-size: 1.5rem; color: var(--subtitle-color);">⬇️</span>
+        <span style="font-size: 1.5rem; color: var(--primary);">⬇️</span>
       </div>
       
       <div class="currency-row">
@@ -219,7 +229,7 @@
         </select>
       </div>
       
-      <button class="btn-calc" style="margin-top: 15px; background: var(--btn-orange); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);" id="t-cur-btn" onclick="convertCurrency()">კონვერტაცია</button>
+      <button class="btn-calc" style="margin-top: 20px; background: linear-gradient(135deg, var(--success) 0%, #059669 100%); box-shadow: 0 10px 20px -10px var(--success);" id="t-cur-btn" onclick="convertCurrency()">კონვერტაცია</button>
       
       <div class="currency-result" id="curResult"></div>
     </div>
@@ -278,10 +288,10 @@
         chartTax: "გადასახადები",
         chartCost: "დამსაქმებლის დანამატი",
         curTitle: "ვალუტის კალკულატორი",
-        curSubtitle: "ცოცხალი კურსი (ეროვნული ბანკი)",
+        curSubtitle: "ცოცხალი კურსი",
         curLabel: "შეიყვანე თანხა",
         curBtn: "კონვერტაცია",
-        curError: "კურსის ჩატვირთვა ვერ მოხერხდა. სცადეთ მოგვიანებით.",
+        curError: "კურსის ჩატვირთვა ვერ მოხერხდა.",
         faqTitle: "ხშირად დასმული კითხვები (FAQ)",
         faq: `
           <details><summary>რა განსხვავებაა გროსსა და ნეტოს შორის?</summary><p>გროსი არის ხელფასი გადასახადებამდე, ნეტო კი — თანხა, რომელსაც თანამშრომელი ხელზე იღებს.</p></details>
@@ -330,10 +340,10 @@
         chartTax: "Taxes",
         chartCost: "Employer Add-on",
         curTitle: "Currency Calculator",
-        curSubtitle: "Live Exchange Rates (National Bank)",
+        curSubtitle: "Live Exchange Rates",
         curLabel: "Enter Amount",
         curBtn: "Convert",
-        curError: "Failed to load exchange rates. Try again later.",
+        curError: "Failed to load exchange rates.",
         faqTitle: "Frequently Asked Questions (FAQ)",
         faq: `
           <details><summary>What is the difference between Gross and Net?</summary><p>Gross is the salary before taxes, Net is the amount the employee actually receives.</p></details>
@@ -382,10 +392,10 @@
         chartTax: "Налоги",
         chartCost: "Доплата работодателя",
         curTitle: "Калькулятор валют",
-        curSubtitle: "Живой курс (Национальный банк)",
+        curSubtitle: "Живой курс",
         curLabel: "Введите сумму",
         curBtn: "Конвертировать",
-        curError: "Не удалось загрузить курсы валют. Попробуйте позже.",
+        curError: "Не удалось загрузить курсы валют.",
         faqTitle: "Часто задаваемые вопросы (FAQ)",
         faq: `
           <details><summary>В чем разница между Гросс и Нет?</summary><p>Гросс — это зарплата до вычета налогов, Нет — сумма, которую сотрудник фактически получает на руки.</p></details>
@@ -405,8 +415,7 @@
     let currentResultData = null;
     let myChart = null;
 
-    // API for exchange rates (Using a reliable free API that supports GEL)
-    let exchangeRates = { GEL: 1, USD: 0.37, EUR: 0.34, GBP: 0.29, TRY: 13.5, RUB: 34.5 }; // Default fallback
+    let exchangeRates = { GEL: 1, USD: 0.37, EUR: 0.34, GBP: 0.29, TRY: 13.5, RUB: 34.5 }; 
     let ratesFetched = false;
 
     const amountInput = document.getElementById('amount');
@@ -432,12 +441,11 @@
         themeToggle.textContent = '☀️';
       }
       
-      fetchRates(); // Fetch currency rates on load
+      fetchRates();
     }
 
     async function fetchRates() {
       try {
-        // Using open.er-api.com which is free and doesn't require API keys
         const res = await fetch('https://open.er-api.com/v6/latest/GEL');
         const data = await res.json();
         if (data && data.rates) {
@@ -486,7 +494,6 @@
       document.getElementById('t-history-title').textContent = t.historyTitle;
       document.getElementById('t-clear-btn').textContent = t.clearBtn;
       
-      // Currency translations
       document.getElementById('t-cur-title').textContent = t.curTitle;
       document.getElementById('t-cur-subtitle').textContent = t.curSubtitle;
       document.getElementById('t-cur-label').textContent = t.curLabel;
@@ -529,7 +536,7 @@
       const ctx = document.getElementById('salaryChart').getContext('2d');
       document.getElementById('chartContainer').style.display = 'block';
       const isDark = document.body.classList.contains('dark-mode');
-      const textColor = isDark ? '#f8fafc' : '#0f172a';
+      const textColor = isDark ? '#f8fafc' : '#111827';
 
       if (myChart) { myChart.destroy(); }
 
@@ -539,18 +546,18 @@
           labels: [labelNet, labelTax],
           datasets: [{
             data: [netAmount, taxAmount],
-            backgroundColor: ['#22c55e', '#ef4444'],
+            backgroundColor: ['#10b981', '#ef4444'],
             borderWidth: 2,
             borderColor: isDark ? '#1e293b' : '#ffffff'
           }]
         },
         options: {
           responsive: true,
-          cutout: '70%',
+          cutout: '75%',
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { color: textColor, font: { size: 12, family: 'Inter' } }
+              labels: { color: textColor, font: { size: 13, family: 'Manrope', weight: 'bold' } }
             }
           }
         }
@@ -580,10 +587,10 @@
         resultTotal.textContent = isGrossToNet ? `${t.net}: ${net.toFixed(2)} ₾` : `${t.reqGross}: ${gross.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>${t.gross}</span><span>${gross.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>${t.incTax}</span><span style="color:#ef4444">− ${incomeTax.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>${t.pension}</span><span style="color:#ef4444">− ${pension.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>${t.incTax}</span><span style="color:var(--danger)">− ${incomeTax.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>${t.pension}</span><span style="color:var(--danger)">− ${pension.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.totalDed}</span><span>${totalTax.toFixed(2)} ₾ (22%)</span></div>
-          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.net}</span><span style="font-size:1.2rem;">${net.toFixed(2)} ₾</span></div>`;
+          <div class="result-row" style="border-top: 2px solid var(--border-color); padding-top: 16px; margin-top: 8px;"><span>${t.net}</span><span style="font-size:1.3rem; color:var(--success);">${net.toFixed(2)} ₾</span></div>`;
         
         renderChart(net, totalTax, t.chartNet, t.chartTax);
         currentResultData = { mode: t.tabEmp, input: val, output: net.toFixed(2), type: isGrossToNet ? 'Gross->Net' : 'Net->Gross' };
@@ -595,8 +602,8 @@
         resultTotal.textContent = isGrossToNet ? `${t.net}: ${net.toFixed(2)} ₾` : `${t.reqGross}: ${gross.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>${t.turnover}</span><span>${gross.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>${t.tax1}</span><span style="color:#ef4444">− ${tax.toFixed(2)} ₾</span></div>
-          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.remaining}</span><span style="font-size:1.2rem;">${net.toFixed(2)} ₾</span></div>`;
+          <div class="result-row"><span>${t.tax1}</span><span style="color:var(--danger)">− ${tax.toFixed(2)} ₾</span></div>
+          <div class="result-row" style="border-top: 2px solid var(--border-color); padding-top: 16px; margin-top: 8px;"><span>${t.remaining}</span><span style="font-size:1.3rem; color:var(--success);">${net.toFixed(2)} ₾</span></div>`;
         
         renderChart(net, tax, t.chartNet, t.chartTax);
         currentResultData = { mode: t.tabSb, input: val, output: net.toFixed(2), type: isGrossToNet ? 'Gross->Net' : 'Net->Gross' };
@@ -610,7 +617,7 @@
         html = `
           <div class="result-row"><span>${t.gross}</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.pension} (Employer)</span><span>+ ${pension.toFixed(2)} ₾</span></div>
-          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.totalCost}</span><span style="font-size:1.2rem;">${totalCost.toFixed(2)} ₾</span></div>`;
+          <div class="result-row" style="border-top: 2px solid var(--border-color); padding-top: 16px; margin-top: 8px;"><span>${t.totalCost}</span><span style="font-size:1.3rem; color:var(--success);">${totalCost.toFixed(2)} ₾</span></div>`;
         
         renderChart(gross, pension, t.gross, t.chartCost);
         currentResultData = { mode: t.tabEmpr, input: val, output: totalCost.toFixed(2), type: 'Cost' };
@@ -620,7 +627,6 @@
       resultBox.classList.add('show');
     });
 
-    // --- CURRENCY LOGIC ---
     function convertCurrency() {
       const t = translations[currentLang];
       const amount = parseFloat(document.getElementById('curAmount').value);
@@ -633,19 +639,13 @@
         return;
       }
 
-      if (!ratesFetched && from !== 'GEL' && to !== 'GEL') {
-          // If rates failed to load and cross-conversion is needed, alert
-          // Fallback rates are available, so it will still calculate
-      }
-
-      // Convert to GEL first, then to target
       const amountInGEL = amount / exchangeRates[from];
       const finalAmount = amountInGEL * exchangeRates[to];
 
       const fromSymbol = document.getElementById('curFrom').options[document.getElementById('curFrom').selectedIndex].text;
       const toSymbol = document.getElementById('curTo').options[document.getElementById('curTo').selectedIndex].text;
 
-      resultBox.innerHTML = `${amount} ${fromSymbol.split(' ')[0]} = <br><strong style="font-size:1.8rem; color:var(--btn-orange);">${finalAmount.toFixed(2)} ${toSymbol.split(' ')[0]}</strong>`;
+      resultBox.innerHTML = `${amount} ${fromSymbol.split(' ')[0]} = <br><strong style="font-size:2rem; color:var(--success);">${finalAmount.toFixed(2)} ${toSymbol.split(' ')[0]}</strong>`;
       resultBox.classList.add('show');
     }
 
@@ -681,7 +681,7 @@
       historyList.innerHTML = '';
       
       if (historyData.length === 0) {
-        historyList.innerHTML = `<p style="font-size:0.9rem; color:var(--subtitle-color); text-align:center;">${t.noHistory}</p>`;
+        historyList.innerHTML = `<p style="font-size:0.95rem; color:var(--text-muted); text-align:center;">${t.noHistory}</p>`;
         historyBox.classList.remove('show');
         return;
       }
@@ -693,12 +693,12 @@
         div.className = 'history-item';
         div.innerHTML = `
           <div>
-            <strong>${item.mode}</strong><br>
-            <span style="font-size:0.8rem; color:var(--subtitle-color);">${item.date}</span>
+            <strong style="color:var(--primary);">${item.mode}</strong><br>
+            <span style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">${item.date}</span>
           </div>
           <div style="text-align:right;">
-            <span>${item.input} ₾ ➔</span><br>
-            <strong style="color:var(--btn-green);">${item.output} ₾</strong>
+            <span style="color:var(--text-muted);">${item.input} ₾ ➔</span><br>
+            <strong style="color:var(--success); font-size:1.1rem;">${item.output} ₾</strong>
           </div>
         `;
         historyList.appendChild(div);
@@ -719,23 +719,23 @@
     function downloadPDF() {
       const t = translations[currentLang];
       const tempDiv = document.createElement('div');
-      tempDiv.style.padding = '30px';
+      tempDiv.style.padding = '40px';
       tempDiv.style.background = '#ffffff';
-      tempDiv.style.color = '#0f172a';
-      tempDiv.style.fontFamily = "'Inter', sans-serif";
+      tempDiv.style.color = '#111827';
+      tempDiv.style.fontFamily = "'Manrope', sans-serif";
       tempDiv.innerHTML = `
-        <h2 style="color: #2563eb; text-align: center; margin-bottom: 10px;">${t.title}</h2>
-        <p style="text-align: center; font-size: 14px; color: #64748b; margin-bottom: 30px;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
-        <hr style="border: 1px solid #e2e8f0; margin-bottom: 30px;">
-        <div style="font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 20px; color: #166534;">${resultTotal.textContent}</div>
-        <div>${resultDetails.innerHTML}</div>
-        <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px;">Generated via salary-calculator-five-sigma.vercel.app</p>
+        <h2 style="color: #4f46e5; text-align: center; font-size: 28px; margin-bottom: 8px;">${t.title}</h2>
+        <p style="text-align: center; font-size: 14px; color: #6b7280; margin-bottom: 40px; font-weight: 600;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
+        <hr style="border: 1px solid #e5e7eb; margin-bottom: 30px;">
+        <div style="font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 30px; color: #10b981;">${resultTotal.textContent}</div>
+        <div style="background: #f9fafb; padding: 20px; border-radius: 16px;">${resultDetails.innerHTML}</div>
+        <p style="text-align: center; font-size: 12px; color: #9ca3af; margin-top: 50px; font-weight: 600;">Generated via salary-calculator-five-sigma.vercel.app</p>
       `;
       
       tempDiv.querySelectorAll('.result-row').forEach(row => {
-          row.style.color = '#0f172a';
-          row.style.borderBottom = '1px dashed #cbd5e1';
-          row.style.padding = '12px 0';
+          row.style.color = '#111827';
+          row.style.borderBottom = '1px solid #e5e7eb';
+          row.style.padding = '14px 0';
       });
 
       const opt = {
