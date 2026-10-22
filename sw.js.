@@ -1,3 +1,56 @@
-self.addEventListener('fetch', function(event) {
-  // ეს ცარიელი ფუნქცია საკმარისია, რომ ბრაუზერმა აღიაროს საიტი როგორც აპლიკაცია
+const CACHE_NAME = 'salary-calc-v1';
+const ASSETS_TO_CACHE = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+  'https://placehold.co/192x192/3182ce/ffffff.png?text=GEL',
+  'https://placehold.co/512x512/3182ce/ffffff.png?text=GEL'
+];
+
+// 1. ინსტალაცია: ინახავს ფაილებს ტელეფონში
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
+  );
+  self.skipWaiting();
+});
+
+// 2. აქტივაცია: შლის ძველ ქეშს, თუ ვერსია შეიცვალა
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+// 3. ჩატვირთვა: ინტერნეტის გარეშე ქეშიდან იღებს მონაცემებს
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      // თუ ფაილი ქეშშია, იქიდან იღებს
+      if (response) {
+        return response;
+      }
+      // თუ არაა, ინტერნეტიდან ცდილობს ჩამოტვირთვას
+      return fetch(event.request).then((networkResponse) => {
+        return networkResponse;
+      }).catch(() => {
+        // თუ ინტერნეტი არ არის და ფაილიც არ არის ქეშში, აბრუნებს მთავარ გვერდს
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html');
+        }
+      });
+    })
+  );
 });
