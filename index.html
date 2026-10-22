@@ -53,7 +53,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; }
     body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-color); color: var(--text-color); padding: 20px; line-height: 1.6; }
     
-    /* Top Controls */
     .top-controls { display: flex; justify-content: space-between; align-items: center; max-width: 560px; margin: 0 auto 15px auto; }
     .lang-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-color); font-weight: 600; cursor: pointer; outline: none; }
     .btn-icon { background: var(--container-bg); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1.2rem; color: var(--text-color); display: flex; align-items: center; justify-content: center;}
@@ -124,7 +123,7 @@
     <div class="input-row">
       <input type="number" id="amount" placeholder="2000" min="0" step="10">
     </div>
-    <button class="btn-calc" id="calcBtn" id="t-btn-calc">გამოთვლა</button>
+    <button class="btn-calc" id="t-btn-calc">გამოთვლა</button>
 
     <div class="result" id="result">
       <div class="result-total" id="resultTotal"></div>
@@ -138,12 +137,7 @@
     <p class="note" id="noteText"></p>
 
     <div class="seo-content" id="t-seo-content">
-      <h2>როგორ ითვლება ხელფასის გადასახადები საქართველოში?</h2>
-      <p>საქართველოში დაქირავებული თანამშრომლისთვის ძირითადი გადასახადებია: <strong>საშემოსავლო გადასახადი 20%</strong> და <strong>საპენსიო შენატანი 2%</strong>. შესაბამისად, ბრუტო (გროს) ხელფასიდან თანამშრომელი იღებს 78%-ს.</p>
-      <h2>რა არის გროსი და ნეტო?</h2>
-      <p><strong>გროსი (Gross)</strong> არის ხელფასი, რომელიც დარიცხულია გადასახადების გამოკლებამდე. <strong>ნეტო (Net)</strong> არის თანხა, რომელსაც თანამშრომელი რეალურად იღებს ხელზე.</p>
-      <h2>ინდივიდუალური მეწარმე (მცირე ბიზნესის სტატუსი)</h2>
-      <p>მცირე ბიზნესის სტატუსის მქონე პირები იხდიან მხოლოდ <strong>1%-ს</strong> ბრუნვიდან, წლიური 500,000 ლარის ლიმიტის ფარგლებში.</p>
+      <!-- SEO Content goes here -->
     </div>
   </div>
 
@@ -177,7 +171,15 @@
         tax1: "გადასახადი (1%)",
         remaining: "დარჩენილი (ნეტო)",
         totalCost: "სულ ხარჯი",
-        empNet: "თანამშრომლის ნეტო"
+        empNet: "თანამშრომლის ნეტო",
+        seo: `
+          <h2>როგორ ითვლება ხელფასის გადასახადები საქართველოში?</h2>
+          <p>საქართველოში დაქირავებული თანამშრომლისთვის ძირითადი გადასახადებია: <strong>საშემოსავლო გადასახადი 20%</strong> და <strong>საპენსიო შენატანი 2%</strong>. შესაბამისად, ბრუტო (გროს) ხელფასიდან თანამშრომელი იღებს 78%-ს.</p>
+          <h2>რა არის გროსი და ნეტო?</h2>
+          <p><strong>გროსი (Gross)</strong> არის ხელფასი, რომელიც დარიცხულია გადასახადების გამოკლებამდე. <strong>ნეტო (Net)</strong> არის თანხა, რომელსაც თანამშრომელი რეალურად იღებს ხელზე.</p>
+          <h2>ინდივიდუალური მეწარმე (მცირე ბიზნესის სტატუსი)</h2>
+          <p>მცირე ბიზნესის სტატუსის მქონე პირები იხდიან მხოლოდ <strong>1%-ს</strong> ბრუნვიდან, წლიური 500,000 ლარის ლიმიტის ფარგლებში.</p>
+        `
       },
       en: {
         title: "Salary Calculator",
@@ -206,7 +208,15 @@
         tax1: "Tax (1%)",
         remaining: "Remaining (Net)",
         totalCost: "Total Cost",
-        empNet: "Employee Net"
+        empNet: "Employee Net",
+        seo: `
+          <h2>How are salary taxes calculated in Georgia?</h2>
+          <p>In Georgia, the main taxes for an employee are: <strong>Income tax 20%</strong> and <strong>Pension contribution 2%</strong>. Therefore, from the gross salary, the employee receives 78%.</p>
+          <h2>What is Gross and Net?</h2>
+          <p><strong>Gross</strong> is the salary calculated before tax deductions. <strong>Net</strong> is the amount the employee actually receives in hand.</p>
+          <h2>Individual Entrepreneur (Small Business Status)</h2>
+          <p>Individuals with small business status pay only <strong>1%</strong> on turnover, within the annual limit of 500,000 GEL.</p>
+        `
       },
       ru: {
         title: "Калькулятор зарплаты",
@@ -235,7 +245,15 @@
         tax1: "Налог (1%)",
         remaining: "Остаток (Нет)",
         totalCost: "Общие расходы",
-        empNet: "На руки сотруднику"
+        empNet: "На руки сотруднику",
+        seo: `
+          <h2>Как рассчитываются налоги на зарплату в Грузии?</h2>
+          <p>В Грузии основными налогами для сотрудника являются: <strong>подоходный налог 20%</strong> и <strong>пенсионный взнос 2%</strong>. Таким образом, из gross-зарплаты сотрудник получает 78%.</p>
+          <h2>Что такое Гросс и Нет?</h2>
+          <p><strong>Гросс</strong> — это зарплата, рассчитанная до вычета налогов. <strong>Нет</strong> — это сумма, которую сотрудник фактически получает на руки.</p>
+          <h2>Индивидуальный предприниматель (Статус малого бизнеса)</h2>
+          <p>Лица со статусом малого бизнеса платят только <strong>1%</strong> с оборота в пределах годового лимита в 500 000 лари.</p>
+        `
       }
     };
 
@@ -245,7 +263,7 @@
 
     // --- DOM ELEMENTS ---
     const amountInput = document.getElementById('amount');
-    const calcBtn = document.getElementById('calcBtn');
+    const calcBtn = document.getElementById('t-btn-calc');
     const resultBox = document.getElementById('result');
     const resultTotal = document.getElementById('resultTotal');
     const resultDetails = document.getElementById('resultDetails');
@@ -257,11 +275,9 @@
 
     // --- INITIALIZATION ---
     function init() {
-      // Set Language
       langSelect.value = currentLang;
       applyLanguage(currentLang);
       
-      // Set Theme
       if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-mode');
         themeToggle.textContent = '☀️';
@@ -285,12 +301,13 @@
       currentLang = lang;
       localStorage.setItem('lang', lang);
       applyLanguage(lang);
-      resultBox.classList.remove('show'); // Hide result on lang change to avoid confusion
-      updateUI(); // Update notes and labels
+      resultBox.classList.remove('show');
     }
 
     function applyLanguage(lang) {
       const t = translations[lang];
+      
+      // Update all static text elements
       document.getElementById('t-title').textContent = t.title;
       document.getElementById('t-subtitle').textContent = t.subtitle;
       document.getElementById('t-tab-emp').textContent = t.tabEmp;
@@ -299,12 +316,9 @@
       document.getElementById('t-btn-calc').textContent = t.btnCalc;
       document.getElementById('t-ad').textContent = t.ad;
       document.getElementById('t-share').textContent = t.share;
+      document.getElementById('t-seo-content').innerHTML = t.seo;
       
-      // Update direction button text based on current state
-      directionBtn.textContent = isGrossToNet ? t.dirG2N : t.dirN2G;
-      inputLabel.textContent = isGrossToNet ? t.inputGross : t.inputNet;
-      
-      // Note text is handled in updateUI()
+      // Update dynamic elements based on current state
       updateUI();
     }
 
@@ -329,14 +343,7 @@
     function updateUI() {
       const t = translations[currentLang];
       directionBtn.textContent = isGrossToNet ? t.dirG2N : t.dirN2G;
-      
-      if (currentMode === 'employer') {
-          inputLabel.textContent = isGrossToNet ? "შეიყვანე გროს ხელფასი (₾)" : "შეიყვანე სასურველი ნეტო (₾)"; // Quick fallback for employer mode
-          if(currentLang === 'en') inputLabel.textContent = isGrossToNet ? "Enter Gross Salary (₾)" : "Enter Desired Net (₾)";
-          if(currentLang === 'ru') inputLabel.textContent = isGrossToNet ? "Введите зарплату Гросс (₾)" : "Введите желаемую сумму Нет (₾)";
-      } else {
-          inputLabel.textContent = isGrossToNet ? t.inputGross : t.inputNet;
-      }
+      inputLabel.textContent = isGrossToNet ? t.inputGross : t.inputNet;
 
       const notes = { employee: t.noteEmp, smallbusiness: t.noteSb, employer: t.noteEmpr };
       noteText.textContent = notes[currentMode];
