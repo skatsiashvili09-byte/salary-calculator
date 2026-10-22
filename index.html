@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ka">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2088263543892073"
-     crossorigin="anonymous"></script>
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" sizes="180x180" href="https://placehold.co/180x180/4f46e5/ffffff.png?text=GEL">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -142,6 +140,16 @@
     .currency-result { text-align: center; font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-top: 20px; padding: 20px; background: var(--input-bg); border-radius: 16px; border: 2px solid var(--primary); display: none;}
     .currency-result.show { display: block; animation: slideUp 0.3s ease-out;}
 
+    /* Compare Section */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+    @media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+    .compare-box { background: var(--input-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center;}
+    .compare-box h3 { font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); }
+    .compare-box input, .compare-box select { margin-bottom: 10px; font-size: 1rem; padding: 12px; }
+    .compare-winner { border: 3px solid var(--success); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); transform: scale(1.02); transition: all 0.3s; }
+    .compare-net { font-size: 1.6rem; font-weight: 800; color: var(--success); margin-top: 10px; }
+    .compare-badge { display: inline-block; background: var(--success); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px;}
+
     /* 🖨️ ბეჭდვის (Print) სტილები */
     #printArea { display: none; }
     @media print {
@@ -213,6 +221,38 @@
     <p class="note" id="noteText"></p>
   </div>
 
+  <!-- COMPARE SECTION -->
+  <div class="container">
+    <h1 id="t-compare-title" style="color: var(--primary);">შეთავაზებების შედარება</h1>
+    <p class="subtitle" id="t-compare-subtitle">შეადარე ორი სხვადასხვა სამსახურის შეთავაზება</p>
+    
+    <div class="compare-grid">
+      <!-- Offer A -->
+      <div class="compare-box" id="boxA">
+        <h3>Offer A</h3>
+        <input type="number" id="compA-amount" placeholder="3000" min="0">
+        <select id="compA-mode">
+          <option value="employee">დაქირავებული (20%+2%)</option>
+          <option value="smallbusiness">ინდ. მეწარმე (1%)</option>
+        </select>
+        <div id="compA-net" class="compare-net" style="display:none;"></div>
+      </div>
+
+      <!-- Offer B -->
+      <div class="compare-box" id="boxB">
+        <h3>Offer B</h3>
+        <input type="number" id="compB-amount" placeholder="3500" min="0">
+        <select id="compB-mode">
+          <option value="smallbusiness">ინდ. მეწარმე (1%)</option>
+          <option value="employee">დაქირავებული (20%+2%)</option>
+        </select>
+        <div id="compB-net" class="compare-net" style="display:none;"></div>
+      </div>
+    </div>
+
+    <button class="btn-calc" style="margin-top: 20px;" id="t-compare-btn" onclick="compareOffers()">შედარება</button>
+  </div>
+
   <!-- CURRENCY CALCULATOR -->
   <div class="container">
     <h1 id="t-cur-title" style="color: var(--primary);">ვალუტის კალკულატორი</h1>
@@ -265,7 +305,7 @@
     <div class="seo-content" id="t-seo-content"></div>
   </div>
 
-  <!-- 🖨️ დასაბეჭდი ზონა (უჩინარია ეკრანზე) -->
+  <!-- 🖨️ დასაბეჭდი ზონა -->
   <div id="printArea"></div>
 
   <!-- FOOTER LINKS -->
@@ -319,6 +359,11 @@
         curLabel: "შეიყვანე თანხა",
         curBtn: "კონვერტაცია",
         curError: "კურსის ჩატვირთვა ვერ მოხერხდა.",
+        compareTitle: "შეთავაზებების შედარება",
+        compareSubtitle: "შეადარე ორი სხვადასხვა სამსახურის შეთავაზება",
+        compareBtn: "შედარება",
+        compareWinner: "უფრო მომგებიანი!",
+        compareError: "შეიყვანე ორივე თანხა",
         faqTitle: "ხშირად დასმული კითხვები (FAQ)",
         faq: `
           <details><summary>რა განსხვავებაა გროსსა და ნეტოს შორის?</summary><p>გროსი არის ხელფასი გადასახადებამდე, ნეტო კი — თანხა, რომელსაც თანამშრომელი ხელზე იღებს.</p></details>
@@ -371,6 +416,11 @@
         curLabel: "Enter Amount",
         curBtn: "Convert",
         curError: "Failed to load exchange rates.",
+        compareTitle: "Compare Offers",
+        compareSubtitle: "Compare two different job offers",
+        compareBtn: "Compare",
+        compareWinner: "More Profitable!",
+        compareError: "Enter both amounts",
         faqTitle: "Frequently Asked Questions (FAQ)",
         faq: `
           <details><summary>What is the difference between Gross and Net?</summary><p>Gross is the salary before taxes, Net is the amount the employee actually receives.</p></details>
@@ -423,6 +473,11 @@
         curLabel: "Введите сумму",
         curBtn: "Конвертировать",
         curError: "Не удалось загрузить курсы валют.",
+        compareTitle: "Сравнение предложений",
+        compareSubtitle: "Сравните два разных предложения о работе",
+        compareBtn: "Сравнить",
+        compareWinner: "Более выгодно!",
+        compareError: "Введите обе суммы",
         faqTitle: "Часто задаваемые вопросы (FAQ)",
         faq: `
           <details><summary>В чем разница между Гросс и Нет?</summary><p>Гросс — это зарплата до вычета налогов, Нет — сумма, которую сотрудник фактически получает на руки.</p></details>
@@ -525,6 +580,10 @@
       document.getElementById('t-cur-subtitle').textContent = t.curSubtitle;
       document.getElementById('t-cur-label').textContent = t.curLabel;
       document.getElementById('t-cur-btn').textContent = t.curBtn;
+
+      document.getElementById('t-compare-title').textContent = t.compareTitle;
+      document.getElementById('t-compare-subtitle').textContent = t.compareSubtitle;
+      document.getElementById('t-compare-btn').textContent = t.compareBtn;
       
       const faqSec = document.getElementById('t-faq-section');
       faqSec.innerHTML = `<h2 style="text-align:center; margin-bottom:15px;">${t.faqTitle}</h2>` + t.faq;
@@ -653,6 +712,58 @@
       resultDetails.innerHTML = html;
       resultBox.classList.add('show');
     });
+
+    // --- COMPARE LOGIC ---
+    function calculateNetOnly(gross, mode) {
+      if (mode === 'employee') return gross * 0.78;
+      if (mode === 'smallbusiness') return gross * 0.99;
+      return gross;
+    }
+
+    function compareOffers() {
+      const t = translations[currentLang];
+      const amountA = parseFloat(document.getElementById('compA-amount').value);
+      const modeA = document.getElementById('compA-mode').value;
+      const amountB = parseFloat(document.getElementById('compB-amount').value);
+      const modeB = document.getElementById('compB-mode').value;
+
+      if (isNaN(amountA) || amountA <= 0 || isNaN(amountB) || amountB <= 0) {
+        alert(t.compareError);
+        return;
+      }
+
+      const netA = calculateNetOnly(amountA, modeA);
+      const netB = calculateNetOnly(amountB, modeB);
+
+      const boxA = document.getElementById('boxA');
+      const boxB = document.getElementById('boxB');
+      const netDivA = document.getElementById('compA-net');
+      const netDivB = document.getElementById('compB-net');
+
+      boxA.classList.remove('compare-winner');
+      boxB.classList.remove('compare-winner');
+      
+      netDivA.style.display = 'block';
+      netDivB.style.display = 'block';
+
+      netDivA.innerHTML = `${t.net}: ${netA.toFixed(2)} ₾`;
+      netDivB.innerHTML = `${t.net}: ${netB.toFixed(2)} ₾`;
+
+      if (netA > netB) {
+        boxA.classList.add('compare-winner');
+        netDivA.innerHTML = `<span class="compare-badge">${t.compareWinner}</span><br>${t.net}: ${netA.toFixed(2)} ₾`;
+        netDivA.style.color = 'var(--success)';
+        netDivB.style.color = 'var(--text-muted)';
+      } else if (netB > netA) {
+        boxB.classList.add('compare-winner');
+        netDivB.innerHTML = `<span class="compare-badge">${t.compareWinner}</span><br>${t.net}: ${netB.toFixed(2)} ₾`;
+        netDivB.style.color = 'var(--success)';
+        netDivA.style.color = 'var(--text-muted)';
+      } else {
+        netDivA.style.color = 'var(--text-main)';
+        netDivB.style.color = 'var(--text-main)';
+      }
+    }
 
     function convertCurrency() {
       const t = translations[currentLang];
@@ -788,7 +899,7 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js?v=7');
+        navigator.serviceWorker.register('/sw.js?v=8');
       });
     }
   </script>
