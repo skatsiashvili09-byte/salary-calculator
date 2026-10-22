@@ -9,6 +9,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ხელფასის კალკულატორი | Salary Calculator</title>
   <meta name="description" content="უფასო ხელფასის კალკულატორი საქართველოსთვის 2026. Free salary calculator for Georgia 2026.">
+  
+  <!-- Chart.js ბიბლიოთეკა დიაგრამისთვის -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     :root {
       --bg-color: #f5f7fa;
@@ -89,6 +93,8 @@
     .result-row:last-child { border-bottom: none; }
     .result-row span:last-child { font-weight: 700; }
     
+    .chart-container { max-width: 250px; margin: 20px auto; display: none; }
+    
     .history-box { margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 15px; display: none; }
     .history-box.show { display: block; }
     .history-item { background: var(--history-bg); padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; border: 1px solid var(--border-color); }
@@ -141,6 +147,12 @@
 
     <div class="result" id="result">
       <div class="result-total" id="resultTotal"></div>
+      
+      <!-- დიაგრამის ადგილი -->
+      <div class="chart-container" id="chartContainer">
+        <canvas id="salaryChart"></canvas>
+      </div>
+
       <div id="resultDetails"></div>
       <button class="btn-save" id="t-save-btn" onclick="saveToHistory()">💾 შენახვა</button>
       <button class="btn-save" style="background: var(--btn-orange); margin-top: 5px;" id="t-pdf-btn" onclick="downloadPDF()">📥 PDF-ად გადმოწერა</button>
@@ -158,13 +170,8 @@
     
     <p class="note" id="noteText"></p>
 
-    <div class="faq-section" id="t-faq-section">
-      <!-- FAQ will be injected here -->
-    </div>
-
-    <div class="seo-content" id="t-seo-content">
-      <!-- SEO Content goes here -->
-    </div>
+    <div class="faq-section" id="t-faq-section"></div>
+    <div class="seo-content" id="t-seo-content"></div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -184,7 +191,7 @@
         ad: "📢 რეკლამის ადგილი (AdSense)",
         share: "🔗 გაუზიარე მეგობრებს",
         shareAlert: "ლინკი დაკოპირებულია!",
-        saveBtn: "💾 გამოთვლის შენახვა",
+        saveBtn: "💾 შენახვა",
         pdfBtn: "📥 PDF-ად გადმოწერა",
         savedAlert: "შენახულია ისტორიაში!",
         historyTitle: "შენახული გამოთვლები",
@@ -204,6 +211,9 @@
         remaining: "დარჩენილი (ნეტო)",
         totalCost: "სულ ხარჯი",
         empNet: "თანამშრომლის ნეტო",
+        chartNet: "ნეტო (ხელზე)",
+        chartTax: "გადასახადები",
+        chartCost: "დამსაქმებლის დანამატი",
         faqTitle: "ხშირად დასმული კითხვები (FAQ)",
         faq: `
           <details><summary>რა განსხვავებაა გროსსა და ნეტოს შორის?</summary><p>გროსი არის ხელფასი გადასახადებამდე, ნეტო კი — თანხა, რომელსაც თანამშრომელი ხელზე იღებს.</p></details>
@@ -231,7 +241,7 @@
         ad: "📢 Ad Space (AdSense)",
         share: "🔗 Share with friends",
         shareAlert: "Link copied!",
-        saveBtn: "💾 Save Calculation",
+        saveBtn: "💾 Save",
         pdfBtn: "📥 Download PDF",
         savedAlert: "Saved to history!",
         historyTitle: "Saved Calculations",
@@ -251,6 +261,9 @@
         remaining: "Remaining (Net)",
         totalCost: "Total Cost",
         empNet: "Employee Net",
+        chartNet: "Net Salary",
+        chartTax: "Taxes",
+        chartCost: "Employer Add-on",
         faqTitle: "Frequently Asked Questions (FAQ)",
         faq: `
           <details><summary>What is the difference between Gross and Net?</summary><p>Gross is the salary before taxes, Net is the amount the employee actually receives.</p></details>
@@ -278,7 +291,7 @@
         ad: "📢 Место для рекламы (AdSense)",
         share: "🔗 Поделиться с друзьями",
         shareAlert: "Ссылка скопирована!",
-        saveBtn: "💾 Сохранить расчет",
+        saveBtn: "💾 Сохранить",
         pdfBtn: "📥 Скачать PDF",
         savedAlert: "Сохранено в историю!",
         historyTitle: "Сохраненные расчеты",
@@ -298,6 +311,9 @@
         remaining: "Остаток (Нет)",
         totalCost: "Общие расходы",
         empNet: "На руки сотруднику",
+        chartNet: "На руки (Нет)",
+        chartTax: "Налоги",
+        chartCost: "Доплата работодателя",
         faqTitle: "Часто задаваемые вопросы (FAQ)",
         faq: `
           <details><summary>В чем разница между Гросс и Нет?</summary><p>Гросс — это зарплата до вычета налогов, Нет — сумма, которую сотрудник фактически получает на руки.</p></details>
@@ -316,6 +332,7 @@
     let isGrossToNet = true;
     let historyData = JSON.parse(localStorage.getItem('calcHistory')) || [];
     let currentResultData = null;
+    let myChart = null; // დიაგრამის ცვლადი
 
     const amountInput = document.getElementById('amount');
     const calcBtn = document.getElementById('t-btn-calc');
@@ -329,8 +346,7 @@
     const themeToggle = document.getElementById('themeToggle');
     const historyBox = document.getElementById('historyBox');
     const historyList = document.getElementById('historyList');
-    const saveBtn = document.getElementById('t-save-btn');
-
+    
     function init() {
       langSelect.value = currentLang;
       applyLanguage(currentLang);
@@ -351,6 +367,11 @@
         localStorage.setItem('theme', 'light');
         themeToggle.textContent = '🌙';
       }
+      
+      // თუ დიაგრამა ღიაა, განვაახლოთ ფერები
+      if (resultBox.classList.contains('show')) {
+        calcBtn.click();
+      }
     }
 
     function changeLanguage(lang) {
@@ -359,6 +380,7 @@
       applyLanguage(lang);
       resultBox.classList.remove('show');
       renderHistory();
+      if(myChart) { myChart.destroy(); myChart = null; }
     }
 
     function applyLanguage(lang) {
@@ -389,6 +411,7 @@
         tab.classList.add('active');
         currentMode = tab.dataset.mode;
         resultBox.classList.remove('show');
+        if(myChart) { myChart.destroy(); myChart = null; }
         updateUI();
       });
     });
@@ -396,6 +419,7 @@
     directionBtn.addEventListener('click', () => {
       isGrossToNet = !isGrossToNet;
       resultBox.classList.remove('show');
+      if(myChart) { myChart.destroy(); myChart = null; }
       updateUI();
     });
 
@@ -406,6 +430,41 @@
 
       const notes = { employee: t.noteEmp, smallbusiness: t.noteSb, employer: t.noteEmpr };
       noteText.textContent = notes[currentMode];
+    }
+
+    function renderChart(netAmount, taxAmount, labelNet, labelTax) {
+      const ctx = document.getElementById('salaryChart').getContext('2d');
+      document.getElementById('chartContainer').style.display = 'block';
+      
+      const isDark = document.body.classList.contains('dark-mode');
+      const textColor = isDark ? '#f7fafc' : '#1a202c';
+
+      if (myChart) {
+        myChart.destroy();
+      }
+
+      myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: [labelNet, labelTax],
+          datasets: [{
+            data: [netAmount, taxAmount],
+            backgroundColor: ['#48bb78', '#e53e3e'],
+            borderWidth: 2,
+            borderColor: isDark ? '#2d3748' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          cutout: '65%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { color: textColor, font: { size: 12 } }
+            }
+          }
+        }
+      });
     }
 
     calcBtn.addEventListener('click', () => {
@@ -426,14 +485,17 @@
         const incomeTax = gross * 0.20;
         const pension = gross * 0.02;
         const net = gross * 0.78;
+        const totalTax = incomeTax + pension;
         
         resultTotal.textContent = isGrossToNet ? `${t.net}: ${net.toFixed(2)} ₾` : `${t.reqGross}: ${gross.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>${t.gross}</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.incTax}</span><span style="color:#e53e3e">− ${incomeTax.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.pension}</span><span style="color:#e53e3e">− ${pension.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>${t.totalDed}</span><span>${(incomeTax + pension).toFixed(2)} ₾ (22%)</span></div>
+          <div class="result-row"><span>${t.totalDed}</span><span>${totalTax.toFixed(2)} ₾ (22%)</span></div>
           <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.net}</span><span style="font-size:1.1rem;">${net.toFixed(2)} ₾</span></div>`;
+        
+        renderChart(net, totalTax, t.chartNet, t.chartTax);
         currentResultData = { mode: t.tabEmp, input: val, output: net.toFixed(2), type: isGrossToNet ? 'Gross->Net' : 'Net->Gross' };
       
       } else if (currentMode === 'smallbusiness') {
@@ -445,17 +507,22 @@
           <div class="result-row"><span>${t.turnover}</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.tax1}</span><span style="color:#e53e3e">− ${tax.toFixed(2)} ₾</span></div>
           <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.remaining}</span><span style="font-size:1.1rem;">${net.toFixed(2)} ₾</span></div>`;
+        
+        renderChart(net, tax, t.chartNet, t.chartTax);
         currentResultData = { mode: t.tabSb, input: val, output: net.toFixed(2), type: isGrossToNet ? 'Gross->Net' : 'Net->Gross' };
       
       } else {
         const pension = gross * 0.02;
         const totalCost = gross + pension;
+        const net = gross * 0.78;
         
         resultTotal.textContent = `${t.totalCost}: ${totalCost.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>${t.gross}</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.pension} (Employer)</span><span>+ ${pension.toFixed(2)} ₾</span></div>
           <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.totalCost}</span><span style="font-size:1.1rem;">${totalCost.toFixed(2)} ₾</span></div>`;
+        
+        renderChart(gross, pension, t.gross, t.chartCost);
         currentResultData = { mode: t.tabEmpr, input: val, output: totalCost.toFixed(2), type: 'Cost' };
       }
       
@@ -564,6 +631,7 @@
 
     init();
 
+    // Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js?v=3')
