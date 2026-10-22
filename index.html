@@ -18,7 +18,6 @@
 
   <style>
     :root {
-      /* ახალი პრემიუმ ფერები */
       --bg-mesh: radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,0) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,0) 0, transparent 50%);
       --bg-color: #f3f4f6;
       --container-bg: rgba(255, 255, 255, 0.95);
@@ -26,9 +25,9 @@
       --text-muted: #6b7280;
       --border-color: #e5e7eb;
       
-      --primary: #4f46e5; /* Indigo */
+      --primary: #4f46e5;
       --primary-hover: #4338ca;
-      --success: #10b981; /* Emerald */
+      --success: #10b981;
       --success-hover: #059669;
       --danger: #ef4444;
       --warning: #f59e0b;
@@ -134,7 +133,6 @@
     .seo-content p { font-size: 1rem; color: var(--text-muted); margin-bottom: 16px; font-weight: 500;}
     .btn-share { display: block; width: 100%; padding: 18px; background: var(--text-main); color: var(--bg-color); text-align: center; text-decoration: none; border-radius: 16px; font-weight: 800; margin-top: 24px; font-size: 1.1rem; border: none; cursor: pointer; font-family: 'Manrope', sans-serif;}
 
-    /* Currency Section */
     .currency-section { margin-top: 20px; }
     .currency-row { display: flex; gap: 12px; margin-bottom: 16px; align-items: center;}
     .currency-row input { flex: 2; }
@@ -719,41 +717,77 @@
     function downloadPDF() {
       const t = translations[currentLang];
       const tempDiv = document.createElement('div');
+      
+      tempDiv.style.position = 'absolute';
+      tempDiv.style.left = '-9999px';
+      tempDiv.style.top = '0';
+      tempDiv.style.width = '700px';
       tempDiv.style.padding = '40px';
       tempDiv.style.background = '#ffffff';
       tempDiv.style.color = '#111827';
-      tempDiv.style.fontFamily = "'Manrope', sans-serif";
+      tempDiv.style.fontFamily = 'Arial, sans-serif';
+      
+      let cleanDetails = resultDetails.innerHTML
+        .replace(/var\(--danger\)/g, '#ef4444')
+        .replace(/var\(--success\)/g, '#10b981')
+        .replace(/var\(--border-color\)/g, '#e5e7eb')
+        .replace(/var\(--text-main\)/g, '#111827')
+        .replace(/var\(--primary\)/g, '#4f46e5');
+
       tempDiv.innerHTML = `
-        <h2 style="color: #4f46e5; text-align: center; font-size: 28px; margin-bottom: 8px;">${t.title}</h2>
-        <p style="text-align: center; font-size: 14px; color: #6b7280; margin-bottom: 40px; font-weight: 600;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
-        <hr style="border: 1px solid #e5e7eb; margin-bottom: 30px;">
-        <div style="font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 30px; color: #10b981;">${resultTotal.textContent}</div>
-        <div style="background: #f9fafb; padding: 20px; border-radius: 16px;">${resultDetails.innerHTML}</div>
-        <p style="text-align: center; font-size: 12px; color: #9ca3af; margin-top: 50px; font-weight: 600;">Generated via salary-calculator-five-sigma.vercel.app</p>
+        <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px;">
+          <h1 style="color: #4f46e5; text-align: center; font-size: 28px; margin-bottom: 8px;">${t.title}</h1>
+          <p style="text-align: center; font-size: 14px; color: #6b7280; margin-bottom: 24px;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
+          <hr style="border: 0; border-top: 1px solid #e5e7eb; margin-bottom: 24px;">
+          
+          <div style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 24px; color: #10b981;">
+            ${resultTotal.textContent}
+          </div>
+          
+          <div style="background: #f9fafb; padding: 20px; border-radius: 8px;">
+            ${cleanDetails}
+          </div>
+          
+          <p style="text-align: center; font-size: 12px; color: #9ca3af; margin-top: 30px;">
+            Generated via salary-calculator-five-sigma.vercel.app
+          </p>
+        </div>
       `;
       
-      tempDiv.querySelectorAll('.result-row').forEach(row => {
-          row.style.color = '#111827';
-          row.style.borderBottom = '1px solid #e5e7eb';
-          row.style.padding = '14px 0';
+      const rows = tempDiv.querySelectorAll('.result-row');
+      rows.forEach(row => {
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.padding = '10px 0';
+        row.style.borderBottom = '1px dashed #e5e7eb';
+        row.style.fontSize = '14px';
+        row.style.color = '#111827';
       });
 
+      document.body.appendChild(tempDiv);
+      
       const opt = {
         margin:       0.5,
         filename:     'salary_calculation.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
       
-      html2pdf().set(opt).from(tempDiv).save();
+      html2pdf().set(opt).from(tempDiv).save().then(() => {
+          document.body.removeChild(tempDiv);
+      }).catch(err => {
+          console.error(err);
+          document.body.removeChild(tempDiv);
+          alert('PDF-ის გენერაცია ვერ მოხერხდა.');
+      });
     }
 
     init();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js?v=3');
+        navigator.serviceWorker.register('/sw.js?v=4');
       });
     }
   </script>
