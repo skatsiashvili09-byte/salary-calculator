@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="ka">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2088263543892073"
-     crossorigin="anonymous"></script>
+  <!-- AdSense Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2088263543892073" crossorigin="anonymous"></script>
+  
+  <!-- Google Analytics (შემდეგ შეცვალე G-XXXXXXXXXX შენი ID-ით) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" sizes="180x180" href="https://placehold.co/180x180/4f46e5/ffffff.png?text=GEL">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,7 +20,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ხელფასის კალკულატორი | Salary Calculator</title>
-  <meta name="description" content="უფასო ხელფასის კალკულატორი საქართველოსთვის 2026. Free salary calculator for Georgia 2026.">
+  <meta name="description" content="უფასო ხელფასის, შვებულებისა და ვალუტის კალკულატორი საქართველოსთვის 2026. Free salary, vacation & currency calculator for Georgia 2026.">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -229,7 +239,6 @@
     <p class="subtitle" id="t-compare-subtitle">შეადარე ორი სხვადასხვა სამსახურის შეთავაზება</p>
     
     <div class="compare-grid">
-      <!-- Offer A -->
       <div class="compare-box" id="boxA">
         <h3>Offer A</h3>
         <input type="number" id="compA-amount" placeholder="3000" min="0">
@@ -239,8 +248,6 @@
         </select>
         <div id="compA-net" class="compare-net" style="display:none;"></div>
       </div>
-
-      <!-- Offer B -->
       <div class="compare-box" id="boxB">
         <h3>Offer B</h3>
         <input type="number" id="compB-amount" placeholder="3500" min="0">
@@ -251,8 +258,30 @@
         <div id="compB-net" class="compare-net" style="display:none;"></div>
       </div>
     </div>
-
     <button class="btn-calc" style="margin-top: 20px;" id="t-compare-btn" onclick="compareOffers()">შედარება</button>
+  </div>
+
+  <!-- 🏖️ VACATION CALCULATOR (NEW) -->
+  <div class="container">
+    <h1 id="t-vac-title" style="color: var(--primary);">შვებულების კალკულატორი</h1>
+    <p class="subtitle" id="t-vac-subtitle">გაიგე რამდენს მიიღებ შვებულების დროს</p>
+    
+    <label id="t-vac-label-salary">შეიყვანე თვიური გროს ხელფასი (₾)</label>
+    <div class="input-row">
+      <input type="number" id="vacSalary" placeholder="2000" min="0">
+    </div>
+    
+    <label id="t-vac-label-days">შვებულების დღეების რაოდენობა</label>
+    <div class="input-row">
+      <input type="number" id="vacDays" placeholder="14" min="1" max="28">
+    </div>
+    
+    <button class="btn-calc" style="background: linear-gradient(135deg, var(--success) 0%, #059669 100%); box-shadow: 0 10px 20px -10px var(--success);" id="t-vac-btn" onclick="calculateVacation()">გამოთვლა</button>
+    
+    <div class="result" id="vacResultBox">
+      <div class="result-total" id="vacResultTotal"></div>
+      <div id="vacResultDetails"></div>
+    </div>
   </div>
 
   <!-- CURRENCY CALCULATOR -->
@@ -273,11 +302,7 @@
           <option value="RUB">RUB (₽)</option>
         </select>
       </div>
-      
-      <div style="text-align: center; margin: 10px 0;">
-        <span style="font-size: 1.5rem; color: var(--primary);">⬇️</span>
-      </div>
-      
+      <div style="text-align: center; margin: 10px 0;"><span style="font-size: 1.5rem; color: var(--primary);">⬇️</span></div>
       <div class="currency-row">
         <select id="curTo">
           <option value="USD">USD ($)</option>
@@ -288,9 +313,7 @@
           <option value="RUB">RUB (₽)</option>
         </select>
       </div>
-      
       <button class="btn-calc" style="margin-top: 20px; background: linear-gradient(135deg, var(--success) 0%, #059669 100%); box-shadow: 0 10px 20px -10px var(--success);" id="t-cur-btn" onclick="convertCurrency()">კონვერტაცია</button>
-      
       <div class="currency-result" id="curResult"></div>
     </div>
   </div>
@@ -301,10 +324,31 @@
     <button class="btn-share" onclick="shareLink()" id="t-share">🔗 გაუზიარე მეგობრებს</button>
   </div>
 
-  <!-- FAQ & SEO -->
+  <!-- FAQ & SEO & BLOG -->
   <div class="container">
     <div class="faq-section" id="t-faq-section"></div>
-    <div class="seo-content" id="t-seo-content"></div>
+    
+    <!-- BLOG SECTION (NEW) -->
+    <div class="seo-content" style="margin-top: 40px; border-top: 2px solid var(--border-color); padding-top: 32px;">
+      <h2 style="text-align: center; margin-bottom: 24px;" id="t-blog-title">📚 სასარგებლო სტატიები</h2>
+      
+      <details>
+        <summary>როგორ მოვითხოვოთ ხელფასის მატება? (5 რჩევა)</summary>
+        <p>ხელფასის მატების მოთხოვნა სტრესული პროცესია, მაგრამ სწორი მიდგომით შესაძლებელია. 1. მოემზადე მონაცემებით: გაიგე, რამდენს იხდიან ბაზარზე შენს პოზიციაზე. 2. გამოყავი შენი მიღწევები: აჩვენე კონკრეტული ციფრები და შედეგები. 3. აირჩიე სწორი დრო: კომპანიის ფინანსური წლის დასაწყისი ან წარმატებული პროექტის დასრულება. 4. ითხოვე შეხვედრა: ნუ იტყვი უეცრად, დაგეგმე საუბარი. 5. იყავი მზად უარისთვის: ჰკითხე, რა კონკრეტული ნაბიჯები უნდა გადადგა მატებისთვის.</p>
+      </details>
+      
+      <details>
+        <summary>გროსი vs ნეტო: რატომ არის ეს მნიშვნელოვანი?</summary>
+        <p>სამსახურის შეთავაზებისას ბევრი მხოლოდ „ხელზე“ მისაღებ თანხას უყურებს, მაგრამ ეს შეცდომაა. გროსი (ბრუტო) არის თანხა გადასახადებამდე, ნეტო კი — რაც რეალურად გრჩება. საქართველოში დაქირავებულს 22% (20% საშემოსავლო + 2% პენსია) აკლდება, ხოლო ინდივიდუალურ მეწარმეს მხოლოდ 1%. ამიტომ, 3000 ლარი ინდ. მეწარმედ ბევრად მეტია, ვიდრე 3000 ლარი დაქირავებულად.</p>
+      </details>
+
+      <details>
+        <summary>რა უნდა იცოდეს ფრილანსერმა გადასახადებზე?</summary>
+        <p>თუ ფრილანსად მუშაობ, საუკეთესო ვარიანტია მცირე ბიზნესის სტატუსი. ამ შემთხვევაში, წლიური ბრუნვიდან (500,000 ლარამდე) იხდი მხოლოდ 1%-ს. მთავარია, სწორად აწარმოო დოკუმენტაცია და არ გადააჭარბო ლიმიტს, თორემ სტატუსს დაკარგავ და ჩვეულებრივი გადასახადები დაგეკისრება.</p>
+      </details>
+    </div>
+    
+    <div class="seo-content" id="t-seo-content" style="border-top: none; margin-top: 20px;"></div>
   </div>
 
   <!-- 🖨️ დასაბეჭდი ზონა -->
@@ -366,6 +410,15 @@
         compareBtn: "შედარება",
         compareWinner: "უფრო მომგებიანი!",
         compareError: "შეიყვანე ორივე თანხა",
+        vacTitle: "შვებულების კალკულატორი",
+        vacSubtitle: "გაიგე რამდენს მიიღებ შვებულების დროს",
+        vacLabelSalary: "შეიყვანე თვიური გროს ხელფასი (₾)",
+        vacLabelDays: "შვებულების დღეების რაოდენობა",
+        vacBtn: "გამოთვლა",
+        vacTotal: "შვებულების ანაზღაურება:",
+        vacDaily: "საშუალო დღიური ანაზღაურება:",
+        vacDays: "შვებულების დღეები:",
+        blogTitle: "📚 სასარგებლო სტატიები",
         faqTitle: "ხშირად დასმული კითხვები (FAQ)",
         faq: `
           <details><summary>რა განსხვავებაა გროსსა და ნეტოს შორის?</summary><p>გროსი არის ხელფასი გადასახადებამდე, ნეტო კი — თანხა, რომელსაც თანამშრომელი ხელზე იღებს.</p></details>
@@ -423,6 +476,15 @@
         compareBtn: "Compare",
         compareWinner: "More Profitable!",
         compareError: "Enter both amounts",
+        vacTitle: "Vacation Calculator",
+        vacSubtitle: "Calculate your vacation pay",
+        vacLabelSalary: "Enter Monthly Gross Salary (₾)",
+        vacLabelDays: "Number of Vacation Days",
+        vacBtn: "Calculate",
+        vacTotal: "Vacation Pay:",
+        vacDaily: "Average Daily Pay:",
+        vacDays: "Vacation Days:",
+        blogTitle: "📚 Useful Articles",
         faqTitle: "Frequently Asked Questions (FAQ)",
         faq: `
           <details><summary>What is the difference between Gross and Net?</summary><p>Gross is the salary before taxes, Net is the amount the employee actually receives.</p></details>
@@ -480,6 +542,15 @@
         compareBtn: "Сравнить",
         compareWinner: "Более выгодно!",
         compareError: "Введите обе суммы",
+        vacTitle: "Калькулятор отпускных",
+        vacSubtitle: "Рассчитайте ваши отпускные",
+        vacLabelSalary: "Введите месячную зарплату Гросс (₾)",
+        vacLabelDays: "Количество дней отпуска",
+        vacBtn: "Рассчитать",
+        vacTotal: "Отпускные:",
+        vacDaily: "Среднедневной заработок:",
+        vacDays: "Дни отпуска:",
+        blogTitle: "📚 Полезные статьи",
         faqTitle: "Часто задаваемые вопросы (FAQ)",
         faq: `
           <details><summary>В чем разница между Гросс и Нет?</summary><p>Гросс — это зарплата до вычета налогов, Нет — сумма, которую сотрудник фактически получает на руки.</p></details>
@@ -559,6 +630,7 @@
       applyLanguage(lang);
       resultBox.classList.remove('show');
       document.getElementById('curResult').classList.remove('show');
+      document.getElementById('vacResultBox').classList.remove('show');
       renderHistory();
       if(myChart) { myChart.destroy(); myChart = null; }
     }
@@ -586,6 +658,13 @@
       document.getElementById('t-compare-title').textContent = t.compareTitle;
       document.getElementById('t-compare-subtitle').textContent = t.compareSubtitle;
       document.getElementById('t-compare-btn').textContent = t.compareBtn;
+
+      document.getElementById('t-vac-title').textContent = t.vacTitle;
+      document.getElementById('t-vac-subtitle').textContent = t.vacSubtitle;
+      document.getElementById('t-vac-label-salary').textContent = t.vacLabelSalary;
+      document.getElementById('t-vac-label-days').textContent = t.vacLabelDays;
+      document.getElementById('t-vac-btn').textContent = t.vacBtn;
+      document.getElementById('t-blog-title').textContent = t.blogTitle;
       
       const faqSec = document.getElementById('t-faq-section');
       faqSec.innerHTML = `<h2 style="text-align:center; margin-bottom:15px;">${t.faqTitle}</h2>` + t.faq;
@@ -714,6 +793,34 @@
       resultDetails.innerHTML = html;
       resultBox.classList.add('show');
     });
+
+    // --- VACATION LOGIC ---
+    function calculateVacation() {
+      const t = translations[currentLang];
+      const salary = parseFloat(document.getElementById('vacSalary').value);
+      const days = parseFloat(document.getElementById('vacDays').value);
+
+      if (isNaN(salary) || salary <= 0 || isNaN(days) || days <= 0) {
+        alert(currentLang === 'ka' ? 'შეიყვანე სწორი მონაცემები' : (currentLang === 'en' ? 'Enter valid data' : 'Введите корректные данные'));
+        return;
+      }
+
+      // Georgian standard: Average daily wage = Monthly Salary / 30
+      const dailyWage = salary / 30;
+      const vacationPay = dailyWage * days;
+
+      document.getElementById('vacResultTotal').textContent = `${t.vacTotal} ${vacationPay.toFixed(2)} ₾`;
+      
+      let html = `
+        <div class="result-row"><span>${t.gross}</span><span>${salary.toFixed(2)} ₾</span></div>
+        <div class="result-row"><span>${t.vacDaily}</span><span>${dailyWage.toFixed(2)} ₾</span></div>
+        <div class="result-row"><span>${t.vacDays}</span><span>${days} დღე</span></div>
+        <div class="result-row" style="border-top: 2px solid var(--border-color); padding-top: 16px; margin-top: 8px;"><span>${t.vacTotal}</span><span style="font-size:1.3rem; color:var(--success);">${vacationPay.toFixed(2)} ₾</span></div>
+      `;
+      
+      document.getElementById('vacResultDetails').innerHTML = html;
+      document.getElementById('vacResultBox').classList.add('show');
+    }
 
     // --- COMPARE LOGIC ---
     function calculateNetOnly(gross, mode) {
@@ -901,7 +1008,7 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js?v=8');
+        navigator.serviceWorker.register('/sw.js?v=10');
       });
     }
   </script>
