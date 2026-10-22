@@ -3,15 +3,8 @@
 <head>
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" sizes="180x180" href="https://placehold.co/180x180/3182ce/ffffff.png?text=GEL">
-  1  <!DOCTYPE html>
-2  <html lang="ka">
-3  <head>
-4    <link rel="manifest" href="/manifest.js...
-5    <link rel="apple-touch-icon" sizes="180...
-6    <meta name="apple-mobile-web-app-capable" content="yes">
-7    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-8    <meta charset="UTF-8">
-9    <meta name="viewport" content="width=de...
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ხელფასის კალკულატორი | Salary Calculator</title>
@@ -39,6 +32,7 @@
       --btn-green: #48bb78;
       --btn-green-hover: #38a169;
       --btn-red: #e53e3e;
+      --btn-orange: #ed8936;
       --shadow: 0 4px 24px rgba(0,0,0,0.08);
       --history-bg: #f7fafc;
     }
@@ -95,14 +89,12 @@
     .result-row:last-child { border-bottom: none; }
     .result-row span:last-child { font-weight: 700; }
     
-    /* HISTORY STYLES */
     .history-box { margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 15px; display: none; }
     .history-box.show { display: block; }
     .history-item { background: var(--history-bg); padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; border: 1px solid var(--border-color); }
     .btn-save { background: var(--btn-green); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold;}
     .btn-clear { background: transparent; color: var(--btn-red); border: 1px solid var(--btn-red); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; margin-top: 10px; width: 100%;}
 
-    /* FAQ STYLES */
     .faq-section { margin-top: 30px; }
     .faq-section h2 { font-size: 1.2rem; margin-bottom: 15px; text-align: center;}
     details { background: var(--history-bg); padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); cursor: pointer; }
@@ -151,6 +143,7 @@
       <div class="result-total" id="resultTotal"></div>
       <div id="resultDetails"></div>
       <button class="btn-save" id="t-save-btn" onclick="saveToHistory()">💾 შენახვა</button>
+      <button class="btn-save" style="background: var(--btn-orange); margin-top: 5px;" id="t-pdf-btn" onclick="downloadPDF()">📥 PDF-ად გადმოწერა</button>
     </div>
 
     <div class="history-box" id="historyBox">
@@ -174,6 +167,7 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     const translations = {
       ka: {
@@ -191,6 +185,7 @@
         share: "🔗 გაუზიარე მეგობრებს",
         shareAlert: "ლინკი დაკოპირებულია!",
         saveBtn: "💾 გამოთვლის შენახვა",
+        pdfBtn: "📥 PDF-ად გადმოწერა",
         savedAlert: "შენახულია ისტორიაში!",
         historyTitle: "შენახული გამოთვლები",
         clearBtn: "🗑️ ისტორიის გასუფთავება",
@@ -217,7 +212,9 @@
         `,
         seo: `
           <h2>როგორ ითვლება ხელფასის გადასახადები საქართველოში?</h2>
-          <p>საქართველოში დაქირავებული თანამშრომლისთვის ძირითადი გადასახადებია: <strong>საშემოსავლო გადასახადი 20%</strong> და <strong>საპენსიო შენატანი 2%</strong>.</p>
+          <p>საქართველოში დაქირავებული თანამშრომლისთვის ძირითადი გადასახადებია: <strong>საშემოსავლო გადასახადი 20%</strong> და <strong>საპენსიო შენატანი 2%</strong>. შესაბამისად, ბრუტო (გროს) ხელფასიდან თანამშრომელი იღებს 78%-ს.</p>
+          <h2>რა არის გროსი და ნეტო?</h2>
+          <p><strong>გროსი (Gross)</strong> არის ხელფასი, რომელიც დარიცხულია გადასახადების გამოკლებამდე. <strong>ნეტო (Net)</strong> არის თანხა, რომელსაც თანამშრომელი რეალურად იღებს ხელზე.</p>
         `
       },
       en: {
@@ -235,6 +232,7 @@
         share: "🔗 Share with friends",
         shareAlert: "Link copied!",
         saveBtn: "💾 Save Calculation",
+        pdfBtn: "📥 Download PDF",
         savedAlert: "Saved to history!",
         historyTitle: "Saved Calculations",
         clearBtn: "🗑️ Clear History",
@@ -261,7 +259,9 @@
         `,
         seo: `
           <h2>How are salary taxes calculated in Georgia?</h2>
-          <p>In Georgia, the main taxes for an employee are: <strong>Income tax 20%</strong> and <strong>Pension contribution 2%</strong>.</p>
+          <p>In Georgia, the main taxes for an employee are: <strong>Income tax 20%</strong> and <strong>Pension contribution 2%</strong>. Therefore, from the gross salary, the employee receives 78%.</p>
+          <h2>What is Gross and Net?</h2>
+          <p><strong>Gross</strong> is the salary calculated before tax deductions. <strong>Net</strong> is the amount the employee actually receives in hand.</p>
         `
       },
       ru: {
@@ -279,6 +279,7 @@
         share: "🔗 Поделиться с друзьями",
         shareAlert: "Ссылка скопирована!",
         saveBtn: "💾 Сохранить расчет",
+        pdfBtn: "📥 Скачать PDF",
         savedAlert: "Сохранено в историю!",
         historyTitle: "Сохраненные расчеты",
         clearBtn: "🗑️ Очистить историю",
@@ -314,7 +315,7 @@
     let currentMode = 'employee';
     let isGrossToNet = true;
     let historyData = JSON.parse(localStorage.getItem('calcHistory')) || [];
-    let currentResultData = null; // Stores data to save
+    let currentResultData = null;
 
     const amountInput = document.getElementById('amount');
     const calcBtn = document.getElementById('t-btn-calc');
@@ -357,7 +358,7 @@
       localStorage.setItem('lang', lang);
       applyLanguage(lang);
       resultBox.classList.remove('show');
-      renderHistory(); // Re-render history to update dates etc
+      renderHistory();
     }
 
     function applyLanguage(lang) {
@@ -371,10 +372,10 @@
       document.getElementById('t-ad').textContent = t.ad;
       document.getElementById('t-share').textContent = t.share;
       document.getElementById('t-save-btn').textContent = t.saveBtn;
+      document.getElementById('t-pdf-btn').textContent = t.pdfBtn;
       document.getElementById('t-history-title').textContent = t.historyTitle;
       document.getElementById('t-clear-btn').textContent = t.clearBtn;
       
-      // Inject FAQ and SEO
       const faqSec = document.getElementById('t-faq-section');
       faqSec.innerHTML = `<h2 style="text-align:center; margin-bottom:15px;">${t.faqTitle}</h2>` + t.faq;
       document.getElementById('t-seo-content').innerHTML = t.seo;
@@ -410,7 +411,7 @@
     calcBtn.addEventListener('click', () => {
       const t = translations[currentLang];
       let val = parseFloat(amountInput.value);
-      if (isNaN(val) || val <= 0) { alert('შეიყვანე სწორი თანხა / Enter valid amount'); return; }
+      if (isNaN(val) || val <= 0) { alert(currentLang === 'ka' ? 'შეიყვანე სწორი თანხა' : (currentLang === 'en' ? 'Enter a valid amount' : 'Введите корректную сумму')); return; }
 
       let html = '';
       let gross = val;
@@ -462,7 +463,6 @@
       resultBox.classList.add('show');
     });
 
-    // --- HISTORY LOGIC ---
     function saveToHistory() {
       if (!currentResultData) return;
       const t = translations[currentLang];
@@ -476,8 +476,8 @@
         type: currentResultData.type
       };
       
-      historyData.unshift(newEntry); // Add to beginning
-      if (historyData.length > 10) historyData.pop(); // Keep max 10 items
+      historyData.unshift(newEntry);
+      if (historyData.length > 10) historyData.pop();
       
       localStorage.setItem('calcHistory', JSON.stringify(historyData));
       renderHistory();
@@ -530,13 +530,47 @@
       }
     }
 
+    function downloadPDF() {
+      const t = translations[currentLang];
+      const tempDiv = document.createElement('div');
+      tempDiv.style.padding = '20px';
+      tempDiv.style.background = '#ffffff';
+      tempDiv.style.color = '#1a202c';
+      tempDiv.style.fontFamily = 'system-ui, sans-serif';
+      tempDiv.innerHTML = `
+        <h2 style="color: #3182ce; text-align: center; margin-bottom: 10px;">${t.title}</h2>
+        <p style="text-align: center; font-size: 12px; color: #718096; margin-bottom: 20px;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
+        <hr style="border: 1px solid #e2e8f0; margin-bottom: 20px;">
+        <div style="font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 15px; color: #22543d;">${resultTotal.textContent}</div>
+        <div>${resultDetails.innerHTML}</div>
+        <p style="text-align: center; font-size: 10px; color: #a0aec0; margin-top: 30px;">Generated via salary-calculator-five-sigma.vercel.app</p>
+      `;
+      
+      tempDiv.querySelectorAll('.result-row').forEach(row => {
+          row.style.color = '#1a202c';
+          row.style.borderBottom = '1px dashed #cbd5e0';
+      });
+
+      const opt = {
+        margin:       0.5,
+        filename:     'salary_calculation.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      
+      html2pdf().set(opt).from(tempDiv).save();
+    }
+
     init();
-  </script>
-<script>
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.register('/sw.js?v=3')
+          .then(reg => console.log('Service Worker registered!'))
+          .catch(err => console.log('Registration failed:', err));
       });
     }
-  </script></body>
+  </script>
+</body>
 </html>
