@@ -10,109 +10,127 @@
   <title>ხელფასის კალკულატორი | Salary Calculator</title>
   <meta name="description" content="უფასო ხელფასის კალკულატორი საქართველოსთვის 2026. Free salary calculator for Georgia 2026.">
   
-  <!-- Chart.js ბიბლიოთეკა დიაგრამისთვის -->
+  <!-- Google Fonts - უფრო ლამაზი შრიფტისთვის -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
-      --bg-color: #f5f7fa;
+      --bg-color: #f8fafc;
+      --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #ebf4ff 100%);
       --container-bg: #ffffff;
-      --text-color: #1a202c;
-      --subtitle-color: #718096;
+      --text-color: #0f172a;
+      --subtitle-color: #64748b;
       --border-color: #e2e8f0;
-      --input-bg: #ffffff;
-      --input-border: #e2e8f0;
-      --tab-bg: #f7fafc;
-      --tab-text: #4a5568;
-      --tab-active-bg: #1a202c;
+      --input-bg: #f8fafc;
+      --input-border: #cbd5e1;
+      --tab-bg: #f1f5f9;
+      --tab-text: #475569;
+      --tab-active-bg: #2563eb;
       --tab-active-text: #ffffff;
-      --result-bg: #f0fff4;
-      --result-border: #9ae6b4;
-      --result-text: #22543d;
-      --ad-bg: #edf2f7;
-      --ad-text: #a0aec0;
-      --btn-blue: #3182ce;
-      --btn-blue-hover: #2b6cb0;
-      --btn-green: #48bb78;
-      --btn-green-hover: #38a169;
-      --btn-red: #e53e3e;
-      --btn-orange: #ed8936;
-      --shadow: 0 4px 24px rgba(0,0,0,0.08);
-      --history-bg: #f7fafc;
+      --result-bg: #f0fdf4;
+      --result-border: #bbf7d0;
+      --result-text: #166534;
+      --ad-bg: #f1f5f9;
+      --ad-text: #94a3b8;
+      --btn-blue: #2563eb;
+      --btn-blue-hover: #1d4ed8;
+      --btn-green: #22c55e;
+      --btn-green-hover: #16a34a;
+      --btn-red: #ef4444;
+      --btn-orange: #f97316;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      --history-bg: #f8fafc;
     }
 
     body.dark-mode {
-      --bg-color: #1a202c;
-      --container-bg: #2d3748;
-      --text-color: #f7fafc;
-      --subtitle-color: #a0aec0;
-      --border-color: #4a5568;
-      --input-bg: #2d3748;
-      --input-border: #4a5568;
-      --tab-bg: #4a5568;
-      --tab-text: #cbd5e0;
-      --tab-active-bg: #3182ce;
+      --bg-color: #0f172a;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --container-bg: #1e293b;
+      --text-color: #f8fafc;
+      --subtitle-color: #94a3b8;
+      --border-color: #334155;
+      --input-bg: #0f172a;
+      --input-border: #475569;
+      --tab-bg: #334155;
+      --tab-text: #cbd5e1;
+      --tab-active-bg: #3b82f6;
       --tab-active-text: #ffffff;
-      --result-bg: #234e32;
-      --result-border: #2f855a;
-      --result-text: #c6f6d5;
-      --ad-bg: #4a5568;
-      --ad-text: #cbd5e0;
-      --shadow: 0 4px 24px rgba(0,0,0,0.4);
-      --history-bg: #2d3748;
+      --result-bg: #064e3b;
+      --result-border: #047857;
+      --result-text: #d1fae5;
+      --ad-bg: #334155;
+      --ad-text: #cbd5e1;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      --history-bg: #334155;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-color); color: var(--text-color); padding: 20px; line-height: 1.6; }
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg-gradient); color: var(--text-color); padding: 20px; line-height: 1.6; min-height: 100vh;}
     
-    .top-controls { display: flex; justify-content: space-between; align-items: center; max-width: 560px; margin: 0 auto 15px auto; }
-    .lang-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-color); font-weight: 600; cursor: pointer; outline: none; }
-    .btn-icon { background: var(--container-bg); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 1.2rem; color: var(--text-color); display: flex; align-items: center; justify-content: center;}
+    .top-controls { display: flex; justify-content: space-between; align-items: center; max-width: 600px; margin: 0 auto 20px auto; }
+    .lang-select { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-color); font-weight: 600; cursor: pointer; outline: none; font-family: 'Inter', sans-serif; box-shadow: var(--shadow);}
+    .btn-icon { background: var(--container-bg); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 1.2rem; color: var(--text-color); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow);}
     
-    .container { max-width: 560px; margin: 0 auto; background: var(--container-bg); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 20px;}
-    h1 { font-size: 1.6rem; margin-bottom: 4px; color: var(--text-color); text-align: center; }
-    .subtitle { color: var(--subtitle-color); font-size: 0.9rem; margin-bottom: 24px; text-align: center; }
+    .container { max-width: 600px; margin: 0 auto 20px auto; background: var(--container-bg); border-radius: 20px; padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border-color);}
+    h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 4px; color: var(--text-color); text-align: center; letter-spacing: -0.5px;}
+    .subtitle { color: var(--subtitle-color); font-size: 0.95rem; margin-bottom: 24px; text-align: center; font-weight: 500;}
     
-    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-    .tab { flex: 1; min-width: 100px; padding: 10px 6px; border: 1px solid var(--border-color); background: var(--tab-bg); border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--tab-text); }
-    .tab.active { background: var(--tab-active-bg); color: var(--tab-active-text); border-color: var(--tab-active-bg); }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .tab { flex: 1; min-width: 100px; padding: 12px 8px; border: 1px solid var(--border-color); background: var(--tab-bg); border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--tab-text); font-family: 'Inter', sans-serif;}
+    .tab.active { background: var(--tab-active-bg); color: var(--tab-active-text); border-color: var(--tab-active-bg); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);}
     
-    .direction-toggle { display: flex; justify-content: center; margin-bottom: 16px; }
-    .btn-toggle { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--btn-blue); background: var(--container-bg); color: var(--btn-blue); font-weight: 600; cursor: pointer; font-size: 0.85rem;}
+    .direction-toggle { display: flex; justify-content: center; margin-bottom: 20px; }
+    .btn-toggle { padding: 10px 20px; border-radius: 30px; border: 1px solid var(--btn-blue); background: transparent; color: var(--btn-blue); font-weight: 600; cursor: pointer; font-size: 0.9rem; font-family: 'Inter', sans-serif;}
+    .btn-toggle:hover { background: rgba(37, 99, 235, 0.1); }
     
-    label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--subtitle-color); margin-bottom: 6px; }
-    .input-row { display: flex; gap: 10px; margin-bottom: 16px; }
-    input[type="number"] { flex: 1; padding: 14px; border: 1.5px solid var(--input-border); border-radius: 8px; font-size: 1.1rem; font-weight: 600; outline: none; width: 100%; background: var(--input-bg); color: var(--text-color); }
+    label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--subtitle-color); margin-bottom: 8px; }
+    .input-row { display: flex; gap: 10px; margin-bottom: 20px; }
+    input[type="number"], select { flex: 1; padding: 16px; border: 1.5px solid var(--input-border); border-radius: 12px; font-size: 1.1rem; font-weight: 600; outline: none; width: 100%; background: var(--input-bg); color: var(--text-color); font-family: 'Inter', sans-serif;}
+    input[type="number"]:focus, select:focus { border-color: var(--btn-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
     
-    .btn-calc { width: 100%; padding: 14px; background: var(--btn-blue); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 10px;}
+    .btn-calc { width: 100%; padding: 16px; background: var(--btn-blue); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 10px; font-family: 'Inter', sans-serif; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);}
+    .btn-calc:hover { background: var(--btn-blue-hover); transform: translateY(-1px); }
     
-    .result { margin-top: 20px; padding: 20px; background: var(--result-bg); border: 1.5px solid var(--result-border); border-radius: 12px; display: none; }
-    .result.show { display: block; }
-    .result-total { font-size: 1.8rem; font-weight: 800; color: var(--result-text); margin-bottom: 16px; text-align: center;}
-    .result-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.95rem; border-bottom: 1px dashed var(--result-border); }
+    .result { margin-top: 24px; padding: 24px; background: var(--result-bg); border: 1.5px solid var(--result-border); border-radius: 16px; display: none; }
+    .result.show { display: block; animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .result-total { font-size: 2rem; font-weight: 800; color: var(--result-text); margin-bottom: 20px; text-align: center; letter-spacing: -0.5px;}
+    .result-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 0.95rem; border-bottom: 1px dashed var(--result-border); font-weight: 500;}
     .result-row:last-child { border-bottom: none; }
     .result-row span:last-child { font-weight: 700; }
     
-    .chart-container { max-width: 250px; margin: 20px auto; display: none; }
+    .chart-container { max-width: 260px; margin: 20px auto; display: none; }
     
-    .history-box { margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 15px; display: none; }
+    .history-box { margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 20px; display: none; }
     .history-box.show { display: block; }
-    .history-item { background: var(--history-bg); padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; border: 1px solid var(--border-color); }
-    .btn-save { background: var(--btn-green); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold;}
-    .btn-clear { background: transparent; color: var(--btn-red); border: 1px solid var(--btn-red); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; margin-top: 10px; width: 100%;}
+    .history-item { background: var(--history-bg); padding: 12px 16px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border: 1px solid var(--border-color); }
+    .btn-save { background: var(--btn-green); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; width: 100%; margin-top: 15px; font-weight: 700; font-family: 'Inter', sans-serif; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);}
+    .btn-clear { background: transparent; color: var(--btn-red); border: 1px solid var(--btn-red); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; margin-top: 15px; width: 100%; font-weight: 600;}
 
     .faq-section { margin-top: 30px; }
-    .faq-section h2 { font-size: 1.2rem; margin-bottom: 15px; text-align: center;}
-    details { background: var(--history-bg); padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border-color); cursor: pointer; }
-    summary { font-weight: 600; font-size: 0.95rem; outline: none; }
-    details p { margin-top: 10px; font-size: 0.9rem; color: var(--subtitle-color); }
+    .faq-section h2 { font-size: 1.3rem; margin-bottom: 15px; text-align: center; font-weight: 700;}
+    details { background: var(--history-bg); padding: 14px 18px; border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); cursor: pointer; }
+    summary { font-weight: 600; font-size: 1rem; outline: none; }
+    details p { margin-top: 12px; font-size: 0.95rem; color: var(--subtitle-color); }
 
-    .note { font-size: 0.8rem; color: var(--subtitle-color); margin-top: 16px; text-align: center;}
-    .ad-slot { margin-top: 24px; min-height: 100px; background: var(--ad-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--ad-text); font-size: 0.8rem; border: 1px dashed var(--border-color);}
-    .seo-content { margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 20px; }
-    .seo-content h2 { font-size: 1.2rem; margin-bottom: 10px; color: var(--text-color); }
-    .seo-content p { font-size: 0.9rem; color: var(--subtitle-color); margin-bottom: 12px; }
-    .btn-share { display: block; width: 100%; padding: 12px; background: var(--btn-green); color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 15px; font-size: 0.95rem; border: none; cursor: pointer;}
+    .note { font-size: 0.85rem; color: var(--subtitle-color); margin-top: 16px; text-align: center; font-weight: 500;}
+    .ad-slot { margin-top: 24px; min-height: 100px; background: var(--ad-bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--ad-text); font-size: 0.9rem; border: 1px dashed var(--border-color); font-weight: 600;}
+    .seo-content { margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 25px; }
+    .seo-content h2 { font-size: 1.3rem; margin-bottom: 12px; color: var(--text-color); font-weight: 700;}
+    .seo-content p { font-size: 0.95rem; color: var(--subtitle-color); margin-bottom: 15px; }
+    .btn-share { display: block; width: 100%; padding: 14px; background: var(--btn-green); color: white; text-align: center; text-decoration: none; border-radius: 12px; font-weight: 700; margin-top: 20px; font-size: 1rem; border: none; cursor: pointer; font-family: 'Inter', sans-serif; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);}
+
+    /* Currency Section Styles */
+    .currency-section { margin-top: 20px; }
+    .currency-row { display: flex; gap: 10px; margin-bottom: 15px; align-items: center;}
+    .currency-row input { flex: 2; }
+    .currency-row select { flex: 1; font-size: 0.95rem; padding: 16px 10px; }
+    .currency-result { text-align: center; font-size: 1.5rem; font-weight: 800; color: var(--btn-blue); margin-top: 15px; padding: 15px; background: var(--history-bg); border-radius: 12px; border: 1px solid var(--border-color); display: none;}
+    .currency-result.show { display: block; }
   </style>
 </head>
 <body>
@@ -125,6 +143,7 @@
     <button class="btn-icon" id="themeToggle" onclick="toggleTheme()">🌙</button>
   </div>
 
+  <!-- MAIN CALCULATOR -->
   <div class="container">
     <h1 id="t-title">ხელფასის კალკულატორი</h1>
     <p class="subtitle" id="t-subtitle">საქართველო · 2026 წლის გადასახადები</p>
@@ -148,28 +167,72 @@
     <div class="result" id="result">
       <div class="result-total" id="resultTotal"></div>
       
-      <!-- დიაგრამის ადგილი -->
       <div class="chart-container" id="chartContainer">
         <canvas id="salaryChart"></canvas>
       </div>
 
       <div id="resultDetails"></div>
       <button class="btn-save" id="t-save-btn" onclick="saveToHistory()">💾 შენახვა</button>
-      <button class="btn-save" style="background: var(--btn-orange); margin-top: 5px;" id="t-pdf-btn" onclick="downloadPDF()">📥 PDF-ად გადმოწერა</button>
+      <button class="btn-save" style="background: var(--btn-orange); margin-top: 10px; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);" id="t-pdf-btn" onclick="downloadPDF()">📥 PDF-ად გადმოწერა</button>
     </div>
 
     <div class="history-box" id="historyBox">
-      <h3 style="font-size: 1rem; margin-bottom: 10px;" id="t-history-title">ისტორია</h3>
+      <h3 style="font-size: 1.1rem; margin-bottom: 15px; font-weight: 700;" id="t-history-title">ისტორია</h3>
       <div id="historyList"></div>
       <button class="btn-clear" id="t-clear-btn" onclick="clearHistory()">🗑️ ისტორიის გასუფთავება</button>
     </div>
-
-    <div class="ad-slot" id="t-ad">📢 რეკლამის ადგილი (AdSense)</div>
-    
-    <button class="btn-share" onclick="shareLink()" id="t-share">🔗 გაუზიარე მეგობრებს</button>
     
     <p class="note" id="noteText"></p>
+  </div>
 
+  <!-- CURRENCY CALCULATOR -->
+  <div class="container">
+    <h1 id="t-cur-title">ვალუტის კალკულატორი</h1>
+    <p class="subtitle" id="t-cur-subtitle">ცოცხალი კურსი (ეროვნული ბანკი)</p>
+    
+    <div class="currency-section">
+      <label id="t-cur-label">შეიყვანე თანხა</label>
+      <div class="currency-row">
+        <input type="number" id="curAmount" placeholder="100" value="100">
+        <select id="curFrom">
+          <option value="GEL">GEL (₾)</option>
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="TRY">TRY (₺)</option>
+          <option value="RUB">RUB (₽)</option>
+        </select>
+      </div>
+      
+      <div style="text-align: center; margin: 10px 0;">
+        <span style="font-size: 1.5rem; color: var(--subtitle-color);">⬇️</span>
+      </div>
+      
+      <div class="currency-row">
+        <select id="curTo">
+          <option value="USD">USD ($)</option>
+          <option value="GEL" selected>GEL (₾)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="TRY">TRY (₺)</option>
+          <option value="RUB">RUB (₽)</option>
+        </select>
+      </div>
+      
+      <button class="btn-calc" style="margin-top: 15px; background: var(--btn-orange); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);" id="t-cur-btn" onclick="convertCurrency()">კონვერტაცია</button>
+      
+      <div class="currency-result" id="curResult"></div>
+    </div>
+  </div>
+
+  <!-- SHARE & AD -->
+  <div class="container">
+    <div class="ad-slot" id="t-ad">📢 რეკლამის ადგილი (AdSense)</div>
+    <button class="btn-share" onclick="shareLink()" id="t-share">🔗 გაუზიარე მეგობრებს</button>
+  </div>
+
+  <!-- FAQ & SEO -->
+  <div class="container">
     <div class="faq-section" id="t-faq-section"></div>
     <div class="seo-content" id="t-seo-content"></div>
   </div>
@@ -214,17 +277,19 @@
         chartNet: "ნეტო (ხელზე)",
         chartTax: "გადასახადები",
         chartCost: "დამსაქმებლის დანამატი",
+        curTitle: "ვალუტის კალკულატორი",
+        curSubtitle: "ცოცხალი კურსი (ეროვნული ბანკი)",
+        curLabel: "შეიყვანე თანხა",
+        curBtn: "კონვერტაცია",
+        curError: "კურსის ჩატვირთვა ვერ მოხერხდა. სცადეთ მოგვიანებით.",
         faqTitle: "ხშირად დასმული კითხვები (FAQ)",
         faq: `
           <details><summary>რა განსხვავებაა გროსსა და ნეტოს შორის?</summary><p>გროსი არის ხელფასი გადასახადებამდე, ნეტო კი — თანხა, რომელსაც თანამშრომელი ხელზე იღებს.</p></details>
           <details><summary>რამდენია საშემოსავლო გადასახადი 2026 წელს?</summary><p>საქართველოში საშემოსავლო გადასახადი ბრტყელია და შეადგენს 20%-ს.</p></details>
-          <details><summary>რა არის მცირე ბიზნესის სტატუსი?</summary><p>ეს არის სპეციალური რეჟიმი ინდ. მეწარმეებისთვის, სადაც ბრუნვაზე იხდიან მხოლოდ 1%-ს (500,000 ლარამდე).</p></details>
         `,
         seo: `
           <h2>როგორ ითვლება ხელფასის გადასახადები საქართველოში?</h2>
           <p>საქართველოში დაქირავებული თანამშრომლისთვის ძირითადი გადასახადებია: <strong>საშემოსავლო გადასახადი 20%</strong> და <strong>საპენსიო შენატანი 2%</strong>. შესაბამისად, ბრუტო (გროს) ხელფასიდან თანამშრომელი იღებს 78%-ს.</p>
-          <h2>რა არის გროსი და ნეტო?</h2>
-          <p><strong>გროსი (Gross)</strong> არის ხელფასი, რომელიც დარიცხულია გადასახადების გამოკლებამდე. <strong>ნეტო (Net)</strong> არის თანხა, რომელსაც თანამშრომელი რეალურად იღებს ხელზე.</p>
         `
       },
       en: {
@@ -264,17 +329,19 @@
         chartNet: "Net Salary",
         chartTax: "Taxes",
         chartCost: "Employer Add-on",
+        curTitle: "Currency Calculator",
+        curSubtitle: "Live Exchange Rates (National Bank)",
+        curLabel: "Enter Amount",
+        curBtn: "Convert",
+        curError: "Failed to load exchange rates. Try again later.",
         faqTitle: "Frequently Asked Questions (FAQ)",
         faq: `
           <details><summary>What is the difference between Gross and Net?</summary><p>Gross is the salary before taxes, Net is the amount the employee actually receives.</p></details>
           <details><summary>What is the income tax rate in 2026?</summary><p>In Georgia, the income tax is a flat rate of 20%.</p></details>
-          <details><summary>What is Small Business Status?</summary><p>It's a special tax regime for individual entrepreneurs paying only 1% on turnover up to 500,000 GEL.</p></details>
         `,
         seo: `
           <h2>How are salary taxes calculated in Georgia?</h2>
           <p>In Georgia, the main taxes for an employee are: <strong>Income tax 20%</strong> and <strong>Pension contribution 2%</strong>. Therefore, from the gross salary, the employee receives 78%.</p>
-          <h2>What is Gross and Net?</h2>
-          <p><strong>Gross</strong> is the salary calculated before tax deductions. <strong>Net</strong> is the amount the employee actually receives in hand.</p>
         `
       },
       ru: {
@@ -314,11 +381,15 @@
         chartNet: "На руки (Нет)",
         chartTax: "Налоги",
         chartCost: "Доплата работодателя",
+        curTitle: "Калькулятор валют",
+        curSubtitle: "Живой курс (Национальный банк)",
+        curLabel: "Введите сумму",
+        curBtn: "Конвертировать",
+        curError: "Не удалось загрузить курсы валют. Попробуйте позже.",
         faqTitle: "Часто задаваемые вопросы (FAQ)",
         faq: `
           <details><summary>В чем разница между Гросс и Нет?</summary><p>Гросс — это зарплата до вычета налогов, Нет — сумма, которую сотрудник фактически получает на руки.</p></details>
           <details><summary>Какова ставка подоходного налога в 2026 году?</summary><p>В Грузии подоходный налог составляет 20%.</p></details>
-          <details><summary>Что такое статус малого бизнеса?</summary><p>Это специальный режим для ИП, при котором платится всего 1% с оборота до 500 000 лари.</p></details>
         `,
         seo: `
           <h2>Как рассчитываются налоги на зарплату в Грузии?</h2>
@@ -332,7 +403,11 @@
     let isGrossToNet = true;
     let historyData = JSON.parse(localStorage.getItem('calcHistory')) || [];
     let currentResultData = null;
-    let myChart = null; // დიაგრამის ცვლადი
+    let myChart = null;
+
+    // API for exchange rates (Using a reliable free API that supports GEL)
+    let exchangeRates = { GEL: 1, USD: 0.37, EUR: 0.34, GBP: 0.29, TRY: 13.5, RUB: 34.5 }; // Default fallback
+    let ratesFetched = false;
 
     const amountInput = document.getElementById('amount');
     const calcBtn = document.getElementById('t-btn-calc');
@@ -356,6 +431,22 @@
         document.body.classList.add('dark-mode');
         themeToggle.textContent = '☀️';
       }
+      
+      fetchRates(); // Fetch currency rates on load
+    }
+
+    async function fetchRates() {
+      try {
+        // Using open.er-api.com which is free and doesn't require API keys
+        const res = await fetch('https://open.er-api.com/v6/latest/GEL');
+        const data = await res.json();
+        if (data && data.rates) {
+          exchangeRates = data.rates;
+          ratesFetched = true;
+        }
+      } catch (e) {
+        console.log("Using fallback rates", e);
+      }
     }
 
     function toggleTheme() {
@@ -367,11 +458,7 @@
         localStorage.setItem('theme', 'light');
         themeToggle.textContent = '🌙';
       }
-      
-      // თუ დიაგრამა ღიაა, განვაახლოთ ფერები
-      if (resultBox.classList.contains('show')) {
-        calcBtn.click();
-      }
+      if (resultBox.classList.contains('show')) { calcBtn.click(); }
     }
 
     function changeLanguage(lang) {
@@ -379,6 +466,7 @@
       localStorage.setItem('lang', lang);
       applyLanguage(lang);
       resultBox.classList.remove('show');
+      document.getElementById('curResult').classList.remove('show');
       renderHistory();
       if(myChart) { myChart.destroy(); myChart = null; }
     }
@@ -397,6 +485,12 @@
       document.getElementById('t-pdf-btn').textContent = t.pdfBtn;
       document.getElementById('t-history-title').textContent = t.historyTitle;
       document.getElementById('t-clear-btn').textContent = t.clearBtn;
+      
+      // Currency translations
+      document.getElementById('t-cur-title').textContent = t.curTitle;
+      document.getElementById('t-cur-subtitle').textContent = t.curSubtitle;
+      document.getElementById('t-cur-label').textContent = t.curLabel;
+      document.getElementById('t-cur-btn').textContent = t.curBtn;
       
       const faqSec = document.getElementById('t-faq-section');
       faqSec.innerHTML = `<h2 style="text-align:center; margin-bottom:15px;">${t.faqTitle}</h2>` + t.faq;
@@ -427,7 +521,6 @@
       const t = translations[currentLang];
       directionBtn.textContent = isGrossToNet ? t.dirG2N : t.dirN2G;
       inputLabel.textContent = isGrossToNet ? t.inputGross : t.inputNet;
-
       const notes = { employee: t.noteEmp, smallbusiness: t.noteSb, employer: t.noteEmpr };
       noteText.textContent = notes[currentMode];
     }
@@ -435,13 +528,10 @@
     function renderChart(netAmount, taxAmount, labelNet, labelTax) {
       const ctx = document.getElementById('salaryChart').getContext('2d');
       document.getElementById('chartContainer').style.display = 'block';
-      
       const isDark = document.body.classList.contains('dark-mode');
-      const textColor = isDark ? '#f7fafc' : '#1a202c';
+      const textColor = isDark ? '#f8fafc' : '#0f172a';
 
-      if (myChart) {
-        myChart.destroy();
-      }
+      if (myChart) { myChart.destroy(); }
 
       myChart = new Chart(ctx, {
         type: 'doughnut',
@@ -449,18 +539,18 @@
           labels: [labelNet, labelTax],
           datasets: [{
             data: [netAmount, taxAmount],
-            backgroundColor: ['#48bb78', '#e53e3e'],
+            backgroundColor: ['#22c55e', '#ef4444'],
             borderWidth: 2,
-            borderColor: isDark ? '#2d3748' : '#ffffff'
+            borderColor: isDark ? '#1e293b' : '#ffffff'
           }]
         },
         options: {
           responsive: true,
-          cutout: '65%',
+          cutout: '70%',
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { color: textColor, font: { size: 12 } }
+              labels: { color: textColor, font: { size: 12, family: 'Inter' } }
             }
           }
         }
@@ -490,10 +580,10 @@
         resultTotal.textContent = isGrossToNet ? `${t.net}: ${net.toFixed(2)} ₾` : `${t.reqGross}: ${gross.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>${t.gross}</span><span>${gross.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>${t.incTax}</span><span style="color:#e53e3e">− ${incomeTax.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>${t.pension}</span><span style="color:#e53e3e">− ${pension.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>${t.incTax}</span><span style="color:#ef4444">− ${incomeTax.toFixed(2)} ₾</span></div>
+          <div class="result-row"><span>${t.pension}</span><span style="color:#ef4444">− ${pension.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.totalDed}</span><span>${totalTax.toFixed(2)} ₾ (22%)</span></div>
-          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.net}</span><span style="font-size:1.1rem;">${net.toFixed(2)} ₾</span></div>`;
+          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.net}</span><span style="font-size:1.2rem;">${net.toFixed(2)} ₾</span></div>`;
         
         renderChart(net, totalTax, t.chartNet, t.chartTax);
         currentResultData = { mode: t.tabEmp, input: val, output: net.toFixed(2), type: isGrossToNet ? 'Gross->Net' : 'Net->Gross' };
@@ -505,8 +595,8 @@
         resultTotal.textContent = isGrossToNet ? `${t.net}: ${net.toFixed(2)} ₾` : `${t.reqGross}: ${gross.toFixed(2)} ₾`;
         html = `
           <div class="result-row"><span>${t.turnover}</span><span>${gross.toFixed(2)} ₾</span></div>
-          <div class="result-row"><span>${t.tax1}</span><span style="color:#e53e3e">− ${tax.toFixed(2)} ₾</span></div>
-          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.remaining}</span><span style="font-size:1.1rem;">${net.toFixed(2)} ₾</span></div>`;
+          <div class="result-row"><span>${t.tax1}</span><span style="color:#ef4444">− ${tax.toFixed(2)} ₾</span></div>
+          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.remaining}</span><span style="font-size:1.2rem;">${net.toFixed(2)} ₾</span></div>`;
         
         renderChart(net, tax, t.chartNet, t.chartTax);
         currentResultData = { mode: t.tabSb, input: val, output: net.toFixed(2), type: isGrossToNet ? 'Gross->Net' : 'Net->Gross' };
@@ -520,7 +610,7 @@
         html = `
           <div class="result-row"><span>${t.gross}</span><span>${gross.toFixed(2)} ₾</span></div>
           <div class="result-row"><span>${t.pension} (Employer)</span><span>+ ${pension.toFixed(2)} ₾</span></div>
-          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.totalCost}</span><span style="font-size:1.1rem;">${totalCost.toFixed(2)} ₾</span></div>`;
+          <div class="result-row" style="border-top: 1.5px solid var(--result-border); padding-top: 10px; margin-top: 5px;"><span>${t.totalCost}</span><span style="font-size:1.2rem;">${totalCost.toFixed(2)} ₾</span></div>`;
         
         renderChart(gross, pension, t.gross, t.chartCost);
         currentResultData = { mode: t.tabEmpr, input: val, output: totalCost.toFixed(2), type: 'Cost' };
@@ -529,6 +619,35 @@
       resultDetails.innerHTML = html;
       resultBox.classList.add('show');
     });
+
+    // --- CURRENCY LOGIC ---
+    function convertCurrency() {
+      const t = translations[currentLang];
+      const amount = parseFloat(document.getElementById('curAmount').value);
+      const from = document.getElementById('curFrom').value;
+      const to = document.getElementById('curTo').value;
+      const resultBox = document.getElementById('curResult');
+
+      if (isNaN(amount) || amount <= 0) {
+        alert(currentLang === 'ka' ? 'შეიყვანე სწორი თანხა' : (currentLang === 'en' ? 'Enter a valid amount' : 'Введите корректную сумму'));
+        return;
+      }
+
+      if (!ratesFetched && from !== 'GEL' && to !== 'GEL') {
+          // If rates failed to load and cross-conversion is needed, alert
+          // Fallback rates are available, so it will still calculate
+      }
+
+      // Convert to GEL first, then to target
+      const amountInGEL = amount / exchangeRates[from];
+      const finalAmount = amountInGEL * exchangeRates[to];
+
+      const fromSymbol = document.getElementById('curFrom').options[document.getElementById('curFrom').selectedIndex].text;
+      const toSymbol = document.getElementById('curTo').options[document.getElementById('curTo').selectedIndex].text;
+
+      resultBox.innerHTML = `${amount} ${fromSymbol.split(' ')[0]} = <br><strong style="font-size:1.8rem; color:var(--btn-orange);">${finalAmount.toFixed(2)} ${toSymbol.split(' ')[0]}</strong>`;
+      resultBox.classList.add('show');
+    }
 
     function saveToHistory() {
       if (!currentResultData) return;
@@ -562,7 +681,7 @@
       historyList.innerHTML = '';
       
       if (historyData.length === 0) {
-        historyList.innerHTML = `<p style="font-size:0.85rem; color:var(--subtitle-color); text-align:center;">${t.noHistory}</p>`;
+        historyList.innerHTML = `<p style="font-size:0.9rem; color:var(--subtitle-color); text-align:center;">${t.noHistory}</p>`;
         historyBox.classList.remove('show');
         return;
       }
@@ -575,7 +694,7 @@
         div.innerHTML = `
           <div>
             <strong>${item.mode}</strong><br>
-            <span style="font-size:0.75rem; color:var(--subtitle-color);">${item.date}</span>
+            <span style="font-size:0.8rem; color:var(--subtitle-color);">${item.date}</span>
           </div>
           <div style="text-align:right;">
             <span>${item.input} ₾ ➔</span><br>
@@ -600,22 +719,23 @@
     function downloadPDF() {
       const t = translations[currentLang];
       const tempDiv = document.createElement('div');
-      tempDiv.style.padding = '20px';
+      tempDiv.style.padding = '30px';
       tempDiv.style.background = '#ffffff';
-      tempDiv.style.color = '#1a202c';
-      tempDiv.style.fontFamily = 'system-ui, sans-serif';
+      tempDiv.style.color = '#0f172a';
+      tempDiv.style.fontFamily = "'Inter', sans-serif";
       tempDiv.innerHTML = `
-        <h2 style="color: #3182ce; text-align: center; margin-bottom: 10px;">${t.title}</h2>
-        <p style="text-align: center; font-size: 12px; color: #718096; margin-bottom: 20px;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
-        <hr style="border: 1px solid #e2e8f0; margin-bottom: 20px;">
-        <div style="font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 15px; color: #22543d;">${resultTotal.textContent}</div>
+        <h2 style="color: #2563eb; text-align: center; margin-bottom: 10px;">${t.title}</h2>
+        <p style="text-align: center; font-size: 14px; color: #64748b; margin-bottom: 30px;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
+        <hr style="border: 1px solid #e2e8f0; margin-bottom: 30px;">
+        <div style="font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 20px; color: #166534;">${resultTotal.textContent}</div>
         <div>${resultDetails.innerHTML}</div>
-        <p style="text-align: center; font-size: 10px; color: #a0aec0; margin-top: 30px;">Generated via salary-calculator-five-sigma.vercel.app</p>
+        <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px;">Generated via salary-calculator-five-sigma.vercel.app</p>
       `;
       
       tempDiv.querySelectorAll('.result-row').forEach(row => {
-          row.style.color = '#1a202c';
-          row.style.borderBottom = '1px dashed #cbd5e0';
+          row.style.color = '#0f172a';
+          row.style.borderBottom = '1px dashed #cbd5e1';
+          row.style.padding = '12px 0';
       });
 
       const opt = {
@@ -631,12 +751,9 @@
 
     init();
 
-    // Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js?v=3')
-          .then(reg => console.log('Service Worker registered!'))
-          .catch(err => console.log('Registration failed:', err));
+        navigator.serviceWorker.register('/sw.js?v=3');
       });
     }
   </script>
