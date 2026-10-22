@@ -139,6 +139,24 @@
     .currency-row select { flex: 1; font-size: 1rem; padding: 18px 10px; }
     .currency-result { text-align: center; font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-top: 20px; padding: 20px; background: var(--input-bg); border-radius: 16px; border: 2px solid var(--primary); display: none;}
     .currency-result.show { display: block; animation: slideUp 0.3s ease-out;}
+
+    /* 🖨️ ბეჭდვის (Print) სტილები */
+    #printArea { display: none; }
+    @media print {
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 20px;
+        background: white;
+        color: black;
+        font-family: Arial, sans-serif;
+      }
+    }
   </style>
 </head>
 <body>
@@ -181,7 +199,7 @@
 
       <div id="resultDetails"></div>
       <button class="btn-save" id="t-save-btn" onclick="saveToHistory()">💾 შენახვა</button>
-      <button class="btn-save" style="background: var(--warning); margin-top: 12px; box-shadow: 0 8px 16px -8px var(--warning);" id="t-pdf-btn" onclick="downloadPDF()">📥 PDF-ად გადმოწერა</button>
+      <button class="btn-save" style="background: var(--warning); margin-top: 12px; box-shadow: 0 8px 16px -8px var(--warning);" id="t-pdf-btn" onclick="downloadPDF()">🖨️ შენახვა / PDF</button>
     </div>
 
     <div class="history-box" id="historyBox">
@@ -245,7 +263,9 @@
     <div class="seo-content" id="t-seo-content"></div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- 🖨️ დასაბეჭდი ზონა (უჩინარია ეკრანზე) -->
+  <div id="printArea"></div>
+
   <script>
     const translations = {
       ka: {
@@ -263,7 +283,7 @@
         share: "🔗 გაუზიარე მეგობრებს",
         shareAlert: "ლინკი დაკოპირებულია!",
         saveBtn: "💾 შენახვა",
-        pdfBtn: "📥 PDF-ად გადმოწერა",
+        pdfBtn: "🖨️ შენახვა / PDF",
         savedAlert: "შენახულია ისტორიაში!",
         historyTitle: "შენახული გამოთვლები",
         clearBtn: "🗑️ ისტორიის გასუფთავება",
@@ -315,7 +335,7 @@
         share: "🔗 Share with friends",
         shareAlert: "Link copied!",
         saveBtn: "💾 Save",
-        pdfBtn: "📥 Download PDF",
+        pdfBtn: "🖨️ Save / PDF",
         savedAlert: "Saved to history!",
         historyTitle: "Saved Calculations",
         clearBtn: "🗑️ Clear History",
@@ -367,7 +387,7 @@
         share: "🔗 Поделиться с друзьями",
         shareAlert: "Ссылка скопирована!",
         saveBtn: "💾 Сохранить",
-        pdfBtn: "📥 Скачать PDF",
+        pdfBtn: "🖨️ Сохранить / PDF",
         savedAlert: "Сохранено в историю!",
         historyTitle: "Сохраненные расчеты",
         clearBtn: "🗑️ Очистить историю",
@@ -714,91 +734,54 @@
       }
     }
 
-    // 🔥 ახალი, გამართული PDF ფუნქცია
+    // 🖨️ ახალი ბეჭდვის ფუნქცია (მუშაობს ყველა მოწყობილობაზე იდეალურად)
     function downloadPDF() {
-      if (typeof html2pdf === 'undefined') {
-        alert('PDF ბიბლიოთეკა ვერ ჩაიტვირთა. გთხოვთ, გადაამოწმოთ ინტერნეტი.');
-        return;
-      }
-
       const t = translations[currentLang];
-      const tempDiv = document.createElement('div');
-      
-      // ვაყენებთ ეკრანზე, მაგრამ ვაქცევთ უხილავად (თორემ iPhone ვერ ხედავს)
-      tempDiv.style.position = 'absolute';
-      tempDiv.style.top = '0';
-      tempDiv.style.left = '0';
-      tempDiv.style.width = '700px';
-      tempDiv.style.padding = '40px';
-      tempDiv.style.background = '#ffffff';
-      tempDiv.style.color = '#000000';
-      tempDiv.style.fontFamily = 'Arial, sans-serif';
-      tempDiv.style.zIndex = '-9999';
-      tempDiv.style.opacity = '0.01';
+      const printArea = document.getElementById('printArea');
 
-      // მონაცემების ამოღება ცხრილის სტრუქტურაში (Flexbox-ის გარეშე)
       let rowsHtml = '';
       const rows = resultDetails.querySelectorAll('.result-row');
       rows.forEach(row => {
-        let span1 = row.querySelector('span:nth-child(1).innerHTML') || row.querySelector('span:nth-child(1)').innerHTML;
-        let span2 = row.querySelector('span:nth-child(2)').innerHTML;
-        
-        // CSS ცვლადების შეცვლა ჩვეულებრივ ფერებში
-        span1 = span1.replace(/var\(.*?\)/g, '#000000');
-        span2 = span2.replace(/var\(.*?\)/g, '#000000');
+        let label = row.querySelector('span:nth-child(1)').textContent;
+        let value = row.querySelector('span:nth-child(2)').textContent;
 
         rowsHtml += `
-          <tr>
-            <td style="padding: 12px 0; border-bottom: 1px solid #e5e7eb; color: #4b5563; font-size: 15px; font-family: Arial, sans-serif;">${span1}</td>
-            <td style="padding: 12px 0; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: bold; color: #111827; font-size: 15px; font-family: Arial, sans-serif;">${span2}</td>
-          </tr>
+          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e5e7eb; font-size: 16px;">
+            <span style="color: #4b5563;">${label}</span>
+            <strong style="color: #111827;">${value}</strong>
+          </div>
         `;
       });
 
-      tempDiv.innerHTML = `
-        <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 30px;">
-          <h1 style="color: #4f46e5; text-align: center; font-size: 28px; margin: 0 0 10px 0; font-family: Arial, sans-serif;">${t.title}</h1>
-          <p style="text-align: center; font-size: 14px; color: #6b7280; margin: 0 0 30px 0; font-family: Arial, sans-serif;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
-          <hr style="border: 0; border-top: 1px solid #e5e7eb; margin-bottom: 20px;">
+      printArea.innerHTML = `
+        <div style="border: 2px solid #e5e7eb; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto;">
+          <h1 style="color: #4f46e5; text-align: center; font-size: 32px; margin: 0 0 10px 0;">${t.title}</h1>
+          <p style="text-align: center; font-size: 16px; color: #6b7280; margin: 0 0 30px 0;">${t.subtitle} | ${new Date().toLocaleDateString()}</p>
+          <hr style="border: 0; border-top: 2px solid #e5e7eb; margin-bottom: 30px;">
           
-          <div style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 30px; color: #10b981; font-family: Arial, sans-serif;">
+          <div style="font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 40px; color: #10b981;">
             ${resultTotal.textContent}
           </div>
           
-          <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
+          <div style="background: #f9fafb; padding: 24px; border-radius: 12px;">
             ${rowsHtml}
-          </table>
+          </div>
           
-          <p style="text-align: center; font-size: 12px; color: #9ca3af; margin-top: 40px; font-family: Arial, sans-serif;">
+          <p style="text-align: center; font-size: 12px; color: #9ca3af; margin-top: 50px;">
             Generated via salary-calculator-five-sigma.vercel.app
           </p>
         </div>
       `;
 
-      document.body.appendChild(tempDiv);
-
-      const opt = {
-        margin:       0.5,
-        filename:     'salary_calculation.pdf',
-        image:        { type: 'jpeg', quality: 1 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(tempDiv).save().then(() => {
-          document.body.removeChild(tempDiv);
-      }).catch(err => {
-          console.error('PDF Error:', err);
-          document.body.removeChild(tempDiv);
-          alert('PDF-ის ჩამოტვირთვისას მოხდა შეცდომა. სცადეთ თავიდან.');
-      });
+      // ვიძახებთ ბრაუზერის ჩაშენებულ ბეჭდვას
+      window.print();
     }
 
     init();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js?v=5');
+        navigator.serviceWorker.register('/sw.js?v=6');
       });
     }
   </script>
